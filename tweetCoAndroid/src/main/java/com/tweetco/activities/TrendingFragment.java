@@ -1,16 +1,14 @@
 package com.tweetco.activities;
 
-import java.lang.reflect.Type;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,21 +16,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.android.gms.games.multiplayer.Invitations.LoadInvitationsResult;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
-import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
+import com.imagedisplay.util.AsyncTask;
 import com.onefortybytes.R;
-import com.tweetco.tweets.TweetCommonData;
-import com.tweetco.utility.UiUtility;
+import com.tweetco.dao.TweetUser;
+import com.tweetco.datastore.AccountSingleton;
+import com.tweetco.datastore.TrendingListSingleton;
+import com.tweetco.interfaces.OnChangeListener;
+import com.tweetco.models.TrendingListModel;
 
-public class TrendingFragment extends ListFragmentWithSwipeRefreshLayout
+public class TrendingFragment extends ListFragmentWithSwipeRefreshLayout implements OnChangeListener<TrendingListModel>
 {
-	
+
+
+
 	public static class TrendingTag
 	{
 		String hashtag;
@@ -42,19 +38,30 @@ public class TrendingFragment extends ListFragmentWithSwipeRefreshLayout
 	private String mUserName = null;
 	
 	private TrendingAdapter mAdapter = null;
+
+	private TrendingListModel model = null;
 	
 	public TrendingFragment() {}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
 	{
+
 		super.onCreate(savedInstanceState);
+		model = new TrendingListModel();
 	}
 	
 	@Override
 	public void onResume()
 	{
 		super.onResume();
+		model.addListener(this);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		model.removeListener(this);
 	}
 	
 	@Override
@@ -72,98 +79,79 @@ public class TrendingFragment extends ListFragmentWithSwipeRefreshLayout
 		
 	}
 	
-	private void loadTrendingTags()
-	{
-		mSwipeRefreshLayout.post(new Runnable() {
-			@Override public void run() {
-			     mSwipeRefreshLayout.setRefreshing(true);
-			}
-			});
-		
-		MobileServiceClient mClient = TweetCommonData.mClient;
-		JsonObject obj = new JsonObject();
-		mClient.invokeApi(ApiInfo.TRENDING, obj, new ApiJsonOperationCallback() {
-			
-			@Override
-			public void onCompleted(JsonElement arg0, Exception arg1,
-					ServiceFilterResponse arg2) 
-			{
-				mSwipeRefreshLayout.post(new Runnable() {
-					@Override public void run() {
-					     mSwipeRefreshLayout.setRefreshing(false);
-					}
-					});
-				
-				if(arg1 == null)
-				{
-					Gson gson = new Gson();
-					
-					Type collectionType = new TypeToken<List<TrendingTag>>(){}.getType();
-					List<TrendingTag> trendingTagList = gson.fromJson(arg0, collectionType);
-					
-					if(trendingTagList!=null && !trendingTagList.isEmpty())
-					{
-						TweetCommonData.trendingTagLists.addAll(trendingTagList);
-						mAdapter.clear();
-						mAdapter.addAll(trendingTagList);
-						mAdapter.notifyDataSetChanged();
-					}
-				}
-				else
-				{
-					Log.e("Item clicked","Exception while loading Trending Tags") ;
-					arg1.printStackTrace();
-				}
-				
-				
-				
-			}
-		},false);
-	
-	}
+
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		mAdapter = new TrendingAdapter(this.getActivity(), android.R.layout.simple_list_item_1);
-		
-		this.setListAdapter(mAdapter);
-		
-		setOnRefreshListener(new OnRefreshListener() {
-			
+		this.setListAdapter(null);
+
+		new AsyncTask<Void, Void, Void>()
+		{
+			@Override
+			protected Void doInBackground(Void... params) {
+				try {
+					mUserName = AccountSingleton.INSTANCE.getAccountModel().getAccountCopy().getUsername();
+					model.loadTrendingList();
+				}
+				catch (MalformedURLException e)
+				{
+
+				}
+
+				return null;
+			}
+
+		}.execute();
+
+		setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				
-				if(TweetCommonData.mClient != null)
-				{
-					loadTrendingTags();
-				}
-				else
-				{
-					Log.e("TrendingFragment", "MobileServiceClient is null");
-					setRefreshing(false);
-				}
+				new AsyncTask<Void, Void, Void>() {
+					@Override
+					protected Void doInBackground(Void... params) {
+						try {
+							model.refreshTrendingListFromServer();
+						} catch (MalformedURLException e) {
+
+						}
+
+						return null;
+					}
+
+					@Override
+					protected void onPostExecute(Void aVoid) {
+						mSwipeRefreshLayout.setRefreshing(false);
+					}
+
+				}.execute();
 			}
 		});
-		
-		if(TweetCommonData.mClient != null)
-		{
-			loadTrendingTags();
-		}
-		else
-		{
-			Log.e("TrendingFragment", "MobileServiceClient is null");
-		}
 	}
-	
+
+	@Override
+	public void onChange(TrendingListModel model) {
+		this.getActivity().runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (mAdapter == null) {
+					mAdapter = new TrendingAdapter(TrendingFragment.this.getActivity(), android.R.layout.simple_list_item_1, TrendingListSingleton.INSTANCE.getTrendingList());
+
+					TrendingFragment.this.setListAdapter(mAdapter);
+				}
+
+				mAdapter.notifyDataSetChanged();
+			}
+		});
+	}
  
 	
 	private class TrendingAdapter extends ArrayAdapter<TrendingTag>
 	{
         Context mContext = null;
-		public TrendingAdapter(Context context, int resource) 
+		public TrendingAdapter(Context context, int resource, List<TrendingTag> list)
 		{
-			super(context, resource);
+			super(context, resource, list);
 			mContext = context;
 		}
 		@Override
