@@ -18,6 +18,8 @@ import com.onefortybytes.R;
 import com.tweetco.dao.LeaderboardUser;
 import com.tweetco.utility.UiUtility;
 
+import java.util.List;
+
 public class LeaderboardAdapter extends ArrayAdapter<LeaderboardUser> 
 {
 	public interface OnProfilePicClick
@@ -31,9 +33,9 @@ public class LeaderboardAdapter extends ArrayAdapter<LeaderboardUser>
 	private ImageFetcher mImageFetcher; //Fetches the images
 
 
-	public LeaderboardAdapter(Activity context, int resoureId, ImageFetcher imageFectcher,OnProfilePicClick onProfilePicClickCallback)
+	public LeaderboardAdapter(Activity context, int resoureId, List<LeaderboardUser> list, ImageFetcher imageFectcher,OnProfilePicClick onProfilePicClickCallback)
 	{
-		super(context, resoureId);
+		super(context, resoureId, list);
 		mContext = context;
 		mOnProfilePicClickCallback = onProfilePicClickCallback;
 		mImageFetcher = imageFectcher;

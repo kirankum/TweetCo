@@ -27,6 +27,7 @@ import com.tweetco.asynctasks.GetLeaderboardTask.GetLeaderboardTaskCompletionCal
 import com.tweetco.dao.LeaderboardUser;
 import com.tweetco.dao.TweetUser;
 import com.tweetco.datastore.AccountSingleton;
+import com.tweetco.datastore.LeaderboardListSingleton;
 import com.tweetco.interfaces.OnChangeListener;
 import com.tweetco.models.LeaderboardListModel;
 import com.tweetco.tweets.TweetCommonData;
@@ -130,13 +131,13 @@ public class LeaderboardFragment extends ListFragmentWithSwipeRefreshLayout impl
 	}
 
 	@Override
-	public void onChange(LeaderboardListModel model) {
+	public void onChange(final LeaderboardListModel model) {
 
 		this.getActivity().runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				if (mAdapter == null) {
-					mAdapter = new LeaderboardAdapter(LeaderboardFragment.this.getActivity(), R.layout.leaderview, imageFetcher, onProfileClick);
+					mAdapter = new LeaderboardAdapter(LeaderboardFragment.this.getActivity(), R.layout.leaderview, LeaderboardListSingleton.INSTANCE.getLeaderboardUserList(), imageFetcher, onProfileClick);
 
 					LeaderboardFragment.this.setListAdapter(mAdapter);
 				}
