@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/google-api-services-urlshortener-v1-rev38-1.19.0-sources.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="eb602bff007401c4f762846681f1f2d3ea4cc73e">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/google-api-services-urlshortener-v1-rev38-1.19.0-sources-af72e83bb65c309605af6c069de96cccdc41f4ba.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/18.0/cce0823396aa693798f8882e64213b1772032b09/guava-18.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="cce0823396aa693798f8882e64213b1772032b09">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/guava-18.0-8b3f32f5b95629ed5254446610f5394e40361bef.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.2.2/1f96456ca233dec780aa224bff076d8e8bca3908/gson-2.2.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1f96456ca233dec780aa224bff076d8e8bca3908">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/gson-2.2.2-aff275a2606b0f4af3818793666c71a49212ae47.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/twitter4j-core-4.0.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="381cf31e9200c2902782f17248d2af18e2ab4c56">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/twitter4j-core-4.0.2-8feda151cd872732370115101c044e56b9294b98.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/google-api-client-android-1.19.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="9ad095414a25217d6a8d976ab322779a40dd3e5d">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/google-api-client-android-1.19.0-1a63c6dc004c562f3dbc1433847c3fa3299b3b5a.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/signpost-core-1.2.1.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="bf95955dcf3d5a78c201e49b0c336787ea73f161">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/signpost-core-1.2.1.2-63780a504010052ef2c4d102b0ae7f0e068c7791.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-location/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1e98ef3f124bb7a11f8575f9ff5dfea330b61b6f">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-833e7f062ecca4cc851b7d38d7f638d8f668758c.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/commons-io-2.4.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b1b6ea3b7e4aa4f492509a4952029cd8e48019ad">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/commons-io-2.4-b573819a01168e6823d8a6c4029cfe278f4beef0.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/commons-collections4-4.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="da217367fd25e88df52ba79e47658d4cf928b0d1">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/commons-collections4-4.0-1dcd626c072195b122f4fe9a9fbdee8f53107e28.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-wallet/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="6836d188602ec5382d1967c58b00960eb8ff8773">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-fd089eee7a675d551bfbeaeeacf5439009dcaeb0.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.0.0/jars/libs/internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="ba3df4eb0a630d7de294f0e48d3f9267d279b784">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-ff65bf6408599a09b3ebc8da873254005fa07a18.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-ads/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="29ebc7e04d877062317c8cc0e68b20f0c1fcda66">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-2e28926f316aa2e9a4402bdb7fb9c4b46732a65e.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-cast/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="8e3a972f28b8bae817e382257ba177a31bcadbbc">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-9397b0ccf32555ea25c809bdfe9bfa294493d57a.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/google-api-client-1.19.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="91531f9a902af1d925fec4e2f04ec411889a925d">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/google-api-client-1.19.0-02dd74367c6e99147177256f0515575c8d57867f.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/test2/floatingActionButtonLibrary/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="10b5d8c2d6b8c32d393c7abd2ecc0fb88ac58746">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-0a7f0280057aeb758b23c3d25a1bdae82b7904e6.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-appindexing/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f02127a85abd52a2cd526d4c2409f21969f80ee8">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-79e7f166c7444a6d3537ce3951fe240cc4c16863.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/google-http-client-1.19.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="6bcffe8c1676d2ad5751e763c8a9dba198deb466">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/google-http-client-1.19.0-7aa0571712f90fe52c750e78e7efc124395ff991.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-panorama/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="ba207be21987c11b37d9f8faa08ed6e722569f30">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-4aa3d89b3ecd55613384387b743ad68d9b61ad5b.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-drive/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f44d03c138cb6488fdbaa65e3a7e5878861a56d8">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-d95d53857a94b2ec889f314852a5842ea7e4a954.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-appstate/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="68c140702c7242d914655bcb3164d9e8c45b84cb">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-54f8cf438a011ac95161c1226bb65da44359d640.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d84409890828e07d344a3b9b1da545dba9897b51">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-15b207e3f5dc89a9bd5a8966113d2a8706e62bd3.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/commons-io-2.4-sources.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f2d8698c46d1167ff24b06a840a87d91a02db891">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/commons-io-2.4-sources-d8b466975a6cb66f8498ebccd5a50b8abc878e35.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/google-api-services-urlshortener-v1-rev38-1.19.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="825ebc96c0203ac7b317c2bb83dbd882faab56a7">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/google-api-services-urlshortener-v1-rev38-1.19.0-db85776b3400b222f15091a34b6bc929755097c0.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-games/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="02bac2dc792d78241077861566f2c82da955e7fa">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-231e104c8b49bde7fb6a2a13914b3ad290ea8c01.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/google-http-client-android-1.19.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="ca16669fa2a5a82d13b037db5723f26007577247">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/google-http-client-android-1.19.0-8768d440eab21b8e17566f7b6cc5fdad43e69d90.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-55ed77d689d327bbaef59d8166967ea19dd20b7d.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/.gradle/caches/modules-2/files-2.1/joda-time/joda-time/2.7/5599707a3eaad13e889f691b3af78c8c03842195/joda-time-2.7.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="5599707a3eaad13e889f691b3af78c8c03842195">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/joda-time-2.7-10c17cf07b88f9a1e96db1068ee2e0743e484435.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/picasso-2.5.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/picasso-2.5.2-d69c92556d76a1ce716dbf21d811d3f64f6ae8f4.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-identity/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="d405025c600055237c171a0bbabaa49d69696573">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-b50296b518794df3ba346415d6fc2252f2001935.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-a4f854c62724eb10173811f1b847c686f233c6f7.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-plus/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="272bc5d7063f24bc3a33ea1d318cde8f31f5ec4c">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-1bc6e5dc53eb439a82ef94ec6778251560b1eb99.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a78183f30e769a98ab4820794f597763088d3065">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-0c5b302537b53a69f7831f4fc325dd6a35e2e689.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-nearby/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="6440e5e5cfe368f9bff3c537fb8988048069cb33">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-0f4dcf7436429b771ba5eebf7bdec7775ecb8cba.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-fitness/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a172852a35ff919e85b9b7f14bbc15c5bee25520">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-7f2f7387fb23edbedfd65067f0c69ce809f55683.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="69dd177337ead693c408c8dddc9546bb6f1244fa">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-a2eff8c4178dc348f6a6e5f4e9a163678a95b1d0.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-maps/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="06a42becc33232ec0ee125161da68c1829c9f8fd">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-3146cb2db6262cef4327ede10759de354ead25fb.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/signpost-commonshttp4-1.2.1.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="731e05de30cfeb1f41d417f886277f9597fe0f36">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/signpost-commonshttp4-1.2.1.2-b0dd95d5f0cdd8af908172e14f66b85767ba8e1b.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="8d736fefa22d896e84a268354b3ed48a42663150">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-5bc4470948995686f2bda5c562765bdbc6a4f214.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/22.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a1372c17fccacca753d3951d3ad820571cbce075">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-b377f8419ecec85c73dafe37c382967b9acbf55b.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="5b37cf49773f7f17aca9830efd3053b0cac56728">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-93e42451f2ea87e85073fc39cf205edf6e8c1a8a.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="e7b35244f50663b3f8d150714bca9ecd7a290da1">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-c9432f1834bf125f1d2d4ace7fb8cb894822cfd4.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-safetynet/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1a6411087ab88ce5542f593e63a2752b6b0d6f1a">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-2e627ed6ef6b54dc35cd3d1a126f631fc4def35a.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.google.android.gms/play-services-appinvite/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="63ec6e9f4fe5482a7447d0f3091b8e543a02554c">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-0cbb5922e72d073970b3cc1293e037273ec26c78.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-059fd4d1bbe4fc0f2113f225863fa7f5c915922d.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/commons-collections4-4.0-sources.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="f8262a0e305c01bb4e8cb4053374315a8bc08e21">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/commons-collections4-4.0-sources-4d7dd1b3efd7204346ccbc19d14cbb464ade88fc.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/exploded-aar/test2/nineOldDroidLibrary/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="23e5bb8f318c43068699b3bd1f7e9ab9f7d8e06b">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/classes-079ade289c9137221d88829d86e910dc5b05df68.jar" />
+    </item>
+    <item
+        jar="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/libs/signpost-jetty6-1.2.1.2.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="50d833636e78a21ac10bfad6fe62b8dac84f4366">
+        <dex dex="/Users/kirankumar/git/tweetco_studio_2/test2/tweetCoAndroid/build/intermediates/pre-dexed/debug/signpost-jetty6-1.2.1.2-b67126be2373ac59b06f16ec2dec27a96267ef5d.jar" />
+    </item>
+
+</items>

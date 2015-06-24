@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="google-api-services-urlshortener-v1-rev38-1.19.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/tweetCoAndroid/libs/google-api-services-urlshortener-v1-rev38-1.19.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/tweetCoAndroid/libs/google-api-services-urlshortener-v1-rev38-1.19.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
