@@ -21,7 +21,7 @@ public class SimpleObservable<T> {
         }
     }
 
-    protected void notifyObservers(final T model) {
+    public void notifyObservers(final T model) {
         synchronized (listeners) {
             for (OnChangeListener<T> listener : listeners) {
                 listener.onChange(model);

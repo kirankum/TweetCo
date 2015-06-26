@@ -28,11 +28,7 @@ public class TweetCommonData
 
     public static Map<String,List<Tweet>> userTweetsList = new ConcurrentHashMap<String, List<Tweet>>();
     
-    public static Map<String,TweetUser> tweetUsers = new ConcurrentHashMap<String, TweetUser>();
-    
-    public static List<TrendingFragment.TrendingTag> trendingTagLists = Collections.synchronizedList(new ArrayList<TrendingFragment.TrendingTag>());
-    
-	public static Account getAccount()
+    public static Account getAccount()
 	{
 		return AccountSingleton.INSTANCE.getAccountModel().getAccountCopy();
 	}

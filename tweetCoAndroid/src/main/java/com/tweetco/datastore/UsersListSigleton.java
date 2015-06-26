@@ -38,10 +38,6 @@ public enum UsersListSigleton {
 
         usersList.addAll(list);
 
-        usersList.retainAll(list);
-
-        userListMap.clear();
-
         for(TweetUser user : usersList)
         {
             userListMap.put(user.username, user);

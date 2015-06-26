@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,10 +27,13 @@ import com.tweetco.TweetCo;
 import com.tweetco.activities.PageLoader.OnLoadCompletedCallback;
 import com.tweetco.dao.Tweet;
 import com.tweetco.dao.TweetUser;
+import com.tweetco.datastore.TweetsListSingleton;
+import com.tweetco.datastore.UsersListSigleton;
 import com.tweetco.tweetlist.TweetListMode;
 import com.tweetco.tweets.TweetCommonData;
 import com.tweetco.utility.UiUtility;
 
+import java.util.List;
 
 
 /**
@@ -37,17 +41,9 @@ import com.tweetco.utility.UiUtility;
  * columns in the GridView is used to create a fake top row of empty views as we use a
  * transparent ActionBar and don't want the real top row of images to start off covered by it.
  */
-public class TweetAdapter extends BaseAdapter
+public class TweetAdapter extends ArrayAdapter<Integer>
 {
 	public static final String TAG = "TweetAdapter";
-
-
-	// A demo listener to pass actions from view to adapter
-	public static abstract class NewPageLoader 
-	{
-		public abstract void loadNext(OnLoadCompletedCallback callback );
-		public abstract void loadTop(OnLoadCompletedCallback callback );
-	}
 
 	public interface OnProfilePicClick
 	{
@@ -83,10 +79,7 @@ public class TweetAdapter extends BaseAdapter
 	protected boolean rowEnabled = true;
 	private long lastDataSetChangedTime = System.currentTimeMillis();
 
-	private TweetListMode mTweetListMode = null; 
-
-
-	public void lock() 
+	public void lock()
 	{
 		canScroll = false;
 	}
@@ -115,14 +108,12 @@ public class TweetAdapter extends BaseAdapter
 		String OwenerName;
 	}
 
-	public TweetAdapter(Context context, ImageFetcher imageFetcher, ImageFetcher imageFetcher2, TweetListMode mode, OnProfilePicClick onProfilePicClickCallback, OnTweetClick onTweetClickCallback, OnReplyClick onReplyClickCallback) 
+	public TweetAdapter(Context context, int resource, List<Integer> objects, ImageFetcher imageFetcher, ImageFetcher imageFetcher2, OnProfilePicClick onProfilePicClickCallback, OnTweetClick onTweetClickCallback, OnReplyClick onReplyClickCallback)
 	{
-		super();
+		super(context, resource, objects);
 		mContext = context;
 		mImageFetcher = imageFetcher;
 		mImageFetcher2 = imageFetcher2;
-
-		mTweetListMode = mode;
 
 		mOnProfilePicClickCallback = onProfilePicClickCallback;
 		mOnTweetClickCallback = onTweetClickCallback;
@@ -214,119 +205,116 @@ public class TweetAdapter extends BaseAdapter
 
 
 		//Load TextFields here
-		final Tweet tweet = (Tweet) getItem(position);
-		TweetUser tweeter = (TweetUser) TweetCommonData.tweetUsers.get(tweet.tweetowner.toLowerCase());
-		if (tweet != null) 
-		{
-			String username = null;
-			String displayName = null;
-			if(tweeter == null)
+		int iterator = getItem(position);
+		try {
+			final Tweet tweet = TweetsListSingleton.INSTANCE.getTweet(iterator);
+
+			//TODO Check if user is not available
+			TweetUser tweeter = (TweetUser) UsersListSigleton.INSTANCE.getUser(tweet.tweetowner.toLowerCase());
+			if (tweet != null)
 			{
-				username = " ";
-				displayName = "Anonymous";
+				String username = null;
+				String displayName = null;
+				if(tweeter == null)
+				{
+					username = " ";
+					displayName = "Anonymous";
+				}
+				else
+				{
+					username = Utils.getTweetHandle(tweeter.username);
+					displayName = tweeter.displayname;
+				}
+
+				holder.handle.setText(username);
+				holder.userName.setText(displayName);
+				holder.tweetContent.setText(tweet.tweetcontent);
+				Linkify.addLinks(holder.tweetContent, Linkify.WEB_URLS | Linkify.HASH_TAGS | Linkify.USER_HANDLE);
+
+				holder.tweetContent.setMovementMethod(new LinkMovementMethod());
+
+				loadTweetImage(tweet, holder.tweetContentImage);
+
+				holder.replyToTweetButton.setOnClickListener(new OnClickListener()
+				{
+					@Override
+					public void onClick(View v)
+					{
+						mOnReplyClickCallback.onItemClick(position);
+					}
+				});
+
+				holder.tweetTime.setText(Utils.getTime(tweet.__createdAt));
+
+				ViewHolderForBookmarkUpVoteAndHide viewHolderBookMarkUpvoteAndHide = new ViewHolderForBookmarkUpVoteAndHide();
+				viewHolderBookMarkUpvoteAndHide.iterator = tweet.iterator;
+				viewHolderBookMarkUpvoteAndHide.OwenerName = tweet.tweetowner;
+				viewHolderBookMarkUpvoteAndHide.position = position;
+
+				if(!TextUtils.isEmpty(tweet.inreplyto))
+				{
+					holder.inReplyTo.setVisibility(View.VISIBLE);
+					holder.inReplyTo.setText("In reply to " + tweet.sourceuser);
+				}
+				else
+				{
+					holder.inReplyTo.setVisibility(View.GONE);
+				}
+
+				//UpVote ImageView
+
+				holder.upvoteView.setTag(viewHolderBookMarkUpvoteAndHide);
+				setUpVoteFlag(holder.upvoteView, holder.upvotesCount, tweet,TweetCommonData.getUserName());
+				holder.upvoteView.setOnClickListener(new OnClickListener()
+				{
+					@Override
+					public void onClick(View upvoteView)
+					{
+						upvoteView.startAnimation(AnimationUtils.loadAnimation(TweetCo.mContext, R.anim.animation));
+						upvoteView.setSelected(true);
+						ViewHolderForBookmarkUpVoteAndHide holder = (ViewHolderForBookmarkUpVoteAndHide) upvoteView.getTag();
+						upVote(upvoteView,TweetCommonData.getUserName(), holder.iterator, holder.OwenerName);
+					}
+
+				});
+
+
+				holder.bookmarkView.setTag(viewHolderBookMarkUpvoteAndHide);
+				setBookMarkFlag(holder.bookmarkView, holder.bookmarksCount, tweet,TweetCommonData.getUserName());
+				holder.bookmarkView.setOnClickListener(new OnClickListener()
+				{
+					@Override
+					public void onClick(View bookmarkView)
+					{
+						bookmarkView.startAnimation(AnimationUtils.loadAnimation(TweetCo.mContext, R.anim.animation));
+						bookmarkView.setSelected(true);
+						ViewHolderForBookmarkUpVoteAndHide viewHolderBookMarkUpvoteAndHide = (ViewHolderForBookmarkUpVoteAndHide) bookmarkView.getTag();
+						bookmark(bookmarkView,TweetCommonData.getUserName(), viewHolderBookMarkUpvoteAndHide.iterator, viewHolderBookMarkUpvoteAndHide.OwenerName);
+					}
+				});
+
+				// Finally load the image asynchronously into the ImageView, this also takes care of
+				// setting a placeholder image while the background thread runs
+				if(tweeter!=null)
+				{
+					loadProfileImage(tweeter,holder.profilePicImage);
+				}
+				else
+				{
+					mImageFetcher.loadImage("A", holder.profilePicImage);
+				}
+
 			}
 			else
 			{
-				username = Utils.getTweetHandle(tweeter.username);
-				displayName = tweeter.displayname;
+				Log.e(TAG, "TweetUser Not found for tweet with content "+tweet.tweetcontent);
 			}
-			
-			holder.handle.setText(username);			
-			holder.userName.setText(displayName);
-			holder.tweetContent.setText(tweet.tweetcontent);	
-			Linkify.addLinks(holder.tweetContent, Linkify.WEB_URLS | Linkify.HASH_TAGS | Linkify.USER_HANDLE);
-
-			holder.tweetContent.setMovementMethod(new LinkMovementMethod());
-
-			loadTweetImage(tweet, holder.tweetContentImage);
-
-			holder.replyToTweetButton.setOnClickListener(new OnClickListener() 
-			{
-				@Override
-				public void onClick(View v) 
-				{
-					mOnReplyClickCallback.onItemClick(position);
-				}
-			});
-
-			holder.tweetTime.setText(Utils.getTime(tweet.__createdAt));
-
-			ViewHolderForBookmarkUpVoteAndHide viewHolderBookMarkUpvoteAndHide = new ViewHolderForBookmarkUpVoteAndHide();
-			viewHolderBookMarkUpvoteAndHide.iterator = tweet.iterator;
-			viewHolderBookMarkUpvoteAndHide.OwenerName = tweet.tweetowner;
-			viewHolderBookMarkUpvoteAndHide.position = position;
-			
-			if(!TextUtils.isEmpty(tweet.inreplyto))
-			{
-				holder.inReplyTo.setVisibility(View.VISIBLE);
-				holder.inReplyTo.setText("In reply to " + tweet.sourceuser);
-			}
-			else
-			{
-				holder.inReplyTo.setVisibility(View.GONE);
-			}
-
-			//UpVote ImageView	
-
-			holder.upvoteView.setTag(viewHolderBookMarkUpvoteAndHide);
-			setUpVoteFlag(holder.upvoteView, holder.upvotesCount, tweet,TweetCommonData.getUserName());
-			holder.upvoteView.setOnClickListener(new OnClickListener() 
-			{	
-				@Override
-				public void onClick(View upvoteView) 
-				{
-					upvoteView.startAnimation(AnimationUtils.loadAnimation(TweetCo.mContext, R.anim.animation));
-					upvoteView.setSelected(true);
-					ViewHolderForBookmarkUpVoteAndHide holder = (ViewHolderForBookmarkUpVoteAndHide) upvoteView.getTag();
-					upVote(upvoteView,TweetCommonData.getUserName(), holder.iterator, holder.OwenerName);
-				}
-
-			});
-
-
-			holder.bookmarkView.setTag(viewHolderBookMarkUpvoteAndHide);
-			setBookMarkFlag(holder.bookmarkView, holder.bookmarksCount, tweet,TweetCommonData.getUserName());
-			holder.bookmarkView.setOnClickListener(new OnClickListener() 
-			{	
-				@Override
-				public void onClick(View bookmarkView) 
-				{
-					bookmarkView.startAnimation(AnimationUtils.loadAnimation(TweetCo.mContext, R.anim.animation));
-					bookmarkView.setSelected(true);
-					ViewHolderForBookmarkUpVoteAndHide viewHolderBookMarkUpvoteAndHide = (ViewHolderForBookmarkUpVoteAndHide) bookmarkView.getTag();
-					bookmark(bookmarkView,TweetCommonData.getUserName(), viewHolderBookMarkUpvoteAndHide.iterator, viewHolderBookMarkUpvoteAndHide.OwenerName);
-				}
-			});
-
-
-			//			holder.hideTweet.setTag(viewHolderBookMarkUpvoteAndHide);
-			//			holder.hideTweet.setOnClickListener(new OnClickListener() 
-			//			{	
-			//				@Override
-			//				public void onClick(View hideTweet) 
-			//				{
-			//					ViewHolderForBookmarkUpVoteAndHide viewHolderBookMarkUpvoteAndHide = (ViewHolderForBookmarkUpVoteAndHide) hideTweet.getTag();
-			//					hide(hideTweet,TweetCommonData.getUserName(), viewHolderBookMarkUpvoteAndHide.iterator);
-			//				}
-			//			});
-
-
-			// Finally load the image asynchronously into the ImageView, this also takes care of
-			// setting a placeholder image while the background thread runs
-			if(tweeter!=null)
-			{
-				loadProfileImage(tweeter,holder.profilePicImage);
-			}
-			else
-			{
-				mImageFetcher.loadImage("A", holder.profilePicImage);
-			}
+		}
+		catch (Exception e) {
 
 		}
-		else
-		{
-			Log.e(TAG, "TweetUser Not found for tweet with content "+tweet.tweetcontent);
-		}
+
+
 
 
 		return convertView;
@@ -344,36 +332,7 @@ public class TweetAdapter extends BaseAdapter
 		view.setText(String.valueOf(count));
 		
 	}
-	
-	
-	public TweetListMode getTweetListMode()
-	{
-		return mTweetListMode;
-	}
 
-
-	@Override
-	public int getCount() 
-	{
-		return mTweetListMode.getCount();
-	}
-
-	public Object removeItem(int position)
-	{
-		return mTweetListMode.removeItem(position);
-	}
-
-	@Override
-	public Object getItem(int position) 
-	{
-		return mTweetListMode.getItem(position);
-	}
-
-	@Override
-	public long getItemId(int position) 
-	{
-		return mTweetListMode.getItemId(position);
-	}
 
 	private void loadProfileImage(TweetUser tweeter,ImageView imageView)
 	{
@@ -411,11 +370,6 @@ public class TweetAdapter extends BaseAdapter
 				}
 			});
 		}
-	}
-
-	public void refreshAdapter()
-	{
-		this.notifyDataSetChanged();
 	}
 
 	private void setUpVoteFlag(ImageView imageView, TextView count, Tweet linkedTweet,String userName)
@@ -571,8 +525,8 @@ public class TweetAdapter extends BaseAdapter
 				{
 					ViewHolderForBookmarkUpVoteAndHide viewHolderBookMarkUpvoteAndHide = (ViewHolderForBookmarkUpVoteAndHide) hideTweetView.getTag();
 					//TODO change the adapter underneath
-					TweetAdapter.this.removeItem(viewHolderBookMarkUpvoteAndHide.position);
-					refreshAdapter();
+					//TweetAdapter.this.removeItem(viewHolderBookMarkUpvoteAndHide.position);
+					//refreshAdapter();
 				}
 				else
 				{

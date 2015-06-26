@@ -44,14 +44,6 @@ public class UsersListClient {
                         Type collectionType = new TypeToken<List<TweetUser>>(){}.getType();
                         List<TweetUser> users = gson.fromJson(arg0, collectionType);
                         usersList.addAll(users);
-
-                        Log.e("tag", "msg");
-                        //TODO need to remove this
-                        for (TweetUser tweetUser : users)
-                        {
-                            TweetCommonData.tweetUsers.put(tweetUser.username.toLowerCase(), tweetUser);
-
-                        }
                     }
                     else
                     {
