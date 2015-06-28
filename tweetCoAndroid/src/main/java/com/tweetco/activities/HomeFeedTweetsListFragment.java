@@ -105,7 +105,7 @@ public class HomeFeedTweetsListFragment extends TweetListFragmentBase implements
 
             @Override
             public void onClick(View v) {
-                launchPostTweetActivity(getArguments().getString(Constants.FOOTER_TAG),-1,null);
+                launchPostTweetActivity("",-1,null);
 
             }
         });
