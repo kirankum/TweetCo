@@ -14,7 +14,6 @@ import com.tweetco.activities.Constants;
 import com.tweetco.activities.LeaderboardFragment;
 import com.tweetco.activities.TrendingFragment;
 import com.tweetco.activities.UsersListFragment;
-import com.tweetco.tweetlist.HomeFeedMode;
 import com.tweetco.tweets.TweetCommonData;
 
 public class CustomFragmentPagerAdapter extends FragmentStatePagerAdapter
@@ -62,11 +61,7 @@ public class CustomFragmentPagerAdapter extends FragmentStatePagerAdapter
 		switch(i)
 		{
 		case 0:
-			Fragment fragment = new TweetListFragment();
-			Bundle bundle = new Bundle();
-			HomeFeedMode mode = new HomeFeedMode(TweetCommonData.getUserName());
-			bundle.putParcelable(Constants.TWEET_LIST_MODE, mode);
-            fragment.setArguments(bundle);
+			Fragment fragment = new HomeFeedTweetsListFragment();
 			return fragment;
 		case 1:
 			return new LeaderboardFragment();

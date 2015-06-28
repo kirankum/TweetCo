@@ -29,6 +29,7 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.onefortybytes.R;
+import com.tweetco.Exceptions.TweetUserNotFoundException;
 import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.dao.TweetUser;
 import com.tweetco.datastore.UsersListSigleton;
@@ -56,6 +57,8 @@ public class UsersListFragment extends ListFragmentWithSwipeRefreshLayout implem
 		super.onCreate(savedInstanceState);
 
 		userListModel = new UsersListModel();
+
+		this.setListAdapter(null);
 
 	}
 
@@ -92,8 +95,6 @@ public class UsersListFragment extends ListFragmentWithSwipeRefreshLayout implem
 		super.onActivityCreated(savedInstanceState);
 
 		imageFetcher = Utils.getImageFetcher(this.getActivity(), 60, 60);
-		
-		this.setListAdapter(null);
 
 		new AsyncTask<Void, Void, Void>()
 		{
@@ -310,9 +311,13 @@ public class UsersListFragment extends ListFragmentWithSwipeRefreshLayout implem
 				} else {
 					List<TweetUser> list = new ArrayList<>(mUsersListFilter.size());
 					for (String username : mUsersListFilter) {
-						TweetUser user = UsersListSigleton.INSTANCE.getUser(username);
-						if (user != null) {
-							list.add(user);
+						try {
+							TweetUser user = UsersListSigleton.INSTANCE.getUser(username);
+							if (user != null) {
+                                list.add(user);
+                            }
+						} catch (TweetUserNotFoundException e) {
+							e.printStackTrace();
 						}
 					}
 
@@ -326,9 +331,8 @@ public class UsersListFragment extends ListFragmentWithSwipeRefreshLayout implem
 			@Override
 			protected void publishResults(CharSequence constraint, FilterResults results) {
 				List<TweetUser> list = (List<TweetUser>) results.values;
-				data.removeAll(list);
+				data.clear();
 				data.addAll(list);
-				data.retainAll(list);
 				notifyDataSetChanged();
 			}
 		}

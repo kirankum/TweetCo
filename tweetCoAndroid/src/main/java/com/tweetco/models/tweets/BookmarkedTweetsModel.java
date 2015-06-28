@@ -2,13 +2,12 @@ package com.tweetco.models.tweets;
 
 import com.google.gson.JsonObject;
 import com.tweetco.activities.ApiInfo;
-import com.tweetco.clients.TweetsListClient;
+import com.tweetco.clients.TweetsClient;
 import com.tweetco.dao.Tweet;
 import com.tweetco.dao.TweetUser;
 import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.datastore.BookmarkedTweetsListSingleton;
 import com.tweetco.datastore.UsersListSigleton;
-import com.tweetco.tweets.TweetCommonData;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ import java.util.List;
  */
 public class BookmarkedTweetsModel {
 
-    private TweetsListClient client = new TweetsListClient();
+    private TweetsClient client = new TweetsClient();
 
     public void refreshBookmarkedTweetsListFromServer() throws MalformedURLException {
         List<Tweet> tweets = new ArrayList<Tweet>();

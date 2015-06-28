@@ -45,6 +45,7 @@ public class LeaderboardFragment extends ListFragmentWithSwipeRefreshLayout impl
         super.onCreate(savedInstanceState);
         imageFetcher = Utils.getImageFetcher(this.getActivity(), 60, 60);
 		model = new LeaderboardListModel();
+		this.setListAdapter(null);
 	}
 	
 	

@@ -54,6 +54,8 @@ import com.tweetco.asynctasks.PostTweetTask;
 import com.tweetco.asynctasks.PostTweetTask.PostTweetTaskCompletionCallback;
 import com.tweetco.asynctasks.PostTweetTaskParams;
 import com.tweetco.dao.TweetUser;
+import com.tweetco.datastore.TrendingListSingleton;
+import com.tweetco.datastore.UsersListSigleton;
 import com.tweetco.tweets.TweetCommonData;
 import com.tweetco.twitter.TwitterApp;
 import com.tweetco.twitter.TwitterApp.TwDialogListener;
@@ -119,7 +121,7 @@ public class PostTweetActivity extends TweetCoBaseActivity
 		mPostToTwitterCheckBox = UiUtility.getView(this, R.id.postToTwitterCheckBox);
 		asyncTaskEventHandler = new AsyncTaskEventHandler(this, "Posting...");
 		asyncTaskEventHandler2 = new AsyncTaskEventHandler(this, "Shortening Urls...");
-		mUsernames = getUsernamesAndHashtags(TweetCommonData.tweetUsers.values().iterator(), TweetCommonData.trendingTagLists.iterator());
+		mUsernames = getUsernamesAndHashtags(UsersListSigleton.INSTANCE.getUsersList().iterator(), TrendingListSingleton.INSTANCE.getTrendingList().iterator());
 		mTweetContent.setAdapter(new ArrayAdapter<String>(PostTweetActivity.this,
 				android.R.layout.simple_dropdown_item_1line, mUsernames));
 		mTweetContent.setThreshold(1);

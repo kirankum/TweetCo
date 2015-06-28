@@ -15,12 +15,12 @@ public enum HomeFeedTweetsListSingleton {
     INSTANCE;
 
     private LinkedList<Integer> homeFeedTweets = new LinkedList<Integer>();
-    private SimpleObservable<LinkedList<Integer>> observers = new SimpleObservable<LinkedList<Integer>>();
+    private SimpleObservable<List<Integer>> observers = new SimpleObservable<List<Integer>>();
 
-    public void addListener(OnChangeListener<LinkedList<Integer>> listener) {
+    public void addListener(OnChangeListener<List<Integer>> listener) {
         observers.addListener(listener);
     }
-    public void removeListener(OnChangeListener<LinkedList<Integer>> listener) {
+    public void removeListener(OnChangeListener<List<Integer>> listener) {
         observers.removeListener(listener);
     }
 

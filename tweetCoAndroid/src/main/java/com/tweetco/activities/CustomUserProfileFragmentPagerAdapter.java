@@ -10,8 +10,6 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
-import com.tweetco.tweetlist.BookmarksFeedMode;
-import com.tweetco.tweetlist.UserFeedMode;
 import com.tweetco.tweets.TweetCommonData;
 
 public class CustomUserProfileFragmentPagerAdapter extends FragmentStatePagerAdapter
@@ -55,7 +53,7 @@ public class CustomUserProfileFragmentPagerAdapter extends FragmentStatePagerAda
 	@Override
 	public Fragment getItem(int i)
 	{
-		Fragment fragment = new TweetListFragment();
+		/*Fragment fragment = new TweetListFragment();
 		Bundle bundle = new Bundle();
 		switch(i)
 		{
@@ -71,7 +69,7 @@ public class CustomUserProfileFragmentPagerAdapter extends FragmentStatePagerAda
 			bundle.putBoolean("hideFooter", true);
             fragment.setArguments(bundle);
 			return fragment;
-		}
+		}*/
 		return null;
 	}
 

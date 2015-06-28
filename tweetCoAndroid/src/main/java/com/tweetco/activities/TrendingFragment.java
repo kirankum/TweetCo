@@ -49,6 +49,7 @@ public class TrendingFragment extends ListFragmentWithSwipeRefreshLayout impleme
 
 		super.onCreate(savedInstanceState);
 		model = new TrendingListModel();
+		this.setListAdapter(null);
 	}
 	
 	@Override
@@ -84,7 +85,6 @@ public class TrendingFragment extends ListFragmentWithSwipeRefreshLayout impleme
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		this.setListAdapter(null);
 
 		new AsyncTask<Void, Void, Void>()
 		{

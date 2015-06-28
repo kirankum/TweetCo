@@ -65,11 +65,11 @@ public class UsersListClient {
 
     }
 
-    public void followUser(String username, IFollowUnfollowStatus statusCallback) throws Exception {
+    public void followUser(String username, IFollowUnfollowStatus statusCallback) throws MalformedURLException {
         followOrUnfollowUser(username, true, statusCallback);
     }
 
-    public void unfollowUser(String username, IFollowUnfollowStatus statusCallback) throws Exception {
+    public void unfollowUser(String username, IFollowUnfollowStatus statusCallback) throws MalformedURLException {
         followOrUnfollowUser(username, false, statusCallback);
     }
 
@@ -78,7 +78,7 @@ public class UsersListClient {
         void failed(String username);
     }
 
-    private void followOrUnfollowUser(final String username, boolean follow, final IFollowUnfollowStatus statusCallback) throws MalformedURLException, Exception
+    private void followOrUnfollowUser(final String username, boolean follow, final IFollowUnfollowStatus statusCallback) throws MalformedURLException
     {
         MobileServiceClient client = AccountSingleton.INSTANCE.getMobileServiceClient();
         JsonObject obj = new JsonObject();

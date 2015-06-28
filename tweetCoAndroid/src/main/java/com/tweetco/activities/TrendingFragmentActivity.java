@@ -7,13 +7,12 @@ import android.support.v7.app.ActionBar;
 
 import com.onefortybytes.R;
 import com.tweetco.dao.Tweet;
-import com.tweetco.tweetlist.TrendingFeedMode;
 import com.tweetco.utility.UiUtility;
 
 public class TrendingFragmentActivity extends TweetCoBaseActivity 
 {
 	private String mTag = null;
-	private TweetListFragment tweetListFragment = null;
+	//private TweetListFragment tweetListFragment = null;
 
 	/**
 	 * Empty constructor as per the Fragment documentation
@@ -34,7 +33,7 @@ public class TrendingFragmentActivity extends TweetCoBaseActivity
 
 		if(UiUtility.getView(this, R.id.trendingTweetsListFragmentContainer) != null)
 		{
-			final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			/*final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 			tweetListFragment = new TweetListFragment();
 			Bundle bundle = new Bundle();
 			TrendingFeedMode mode = new TrendingFeedMode(mTag);
@@ -42,7 +41,7 @@ public class TrendingFragmentActivity extends TweetCoBaseActivity
 			bundle.putString(Constants.FOOTER_TAG, "#"+mTag+" ");
 			tweetListFragment.setArguments(bundle);
 			ft.replace(R.id.trendingTweetsListFragmentContainer, tweetListFragment);
-			ft.commit();
+			ft.commit();*/
 		}
 	}
 
@@ -53,11 +52,11 @@ public class TrendingFragmentActivity extends TweetCoBaseActivity
 		{
 			if(resultCode == RESULT_OK)
 			{
-				if(tweetListFragment!=null && tweetListFragment.isVisible())
+				/*if(tweetListFragment!=null && tweetListFragment.isVisible())
 				{
 					Tweet tweet =  data.getParcelableExtra(Constants.POSTED_TWEET);
 					tweetListFragment.refreshTop();
-				}
+				}*/
 			}
 		}
 		else

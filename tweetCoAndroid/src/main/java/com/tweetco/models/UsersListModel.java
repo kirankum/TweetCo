@@ -1,5 +1,6 @@
 package com.tweetco.models;
 
+import com.tweetco.Exceptions.TweetUserNotFoundException;
 import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.clients.UsersListClient;
 import com.tweetco.dao.TweetUser;
@@ -44,7 +45,7 @@ public class UsersListModel extends SimpleObservable<UsersListModel> {
         notifyObservers(this);
     }
 
-    public void followUser(String username) throws Exception {
+    public void followUser(String username) throws TweetUserNotFoundException, MalformedURLException {
 
         UsersListSigleton.INSTANCE.followUser(username);
         notifyObservers(this);
@@ -52,19 +53,27 @@ public class UsersListModel extends SimpleObservable<UsersListModel> {
         client.followUser(username, new UsersListClient.IFollowUnfollowStatus() {
             @Override
             public void success(String username) {
-                UsersListSigleton.INSTANCE.followUser(username);
-                notifyObservers(UsersListModel.this);
+                try {
+                    UsersListSigleton.INSTANCE.followUser(username);
+                    notifyObservers(UsersListModel.this);
+                } catch (TweetUserNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void failed(String username) {
-                UsersListSigleton.INSTANCE.unfollowUser(username);
-                notifyObservers(UsersListModel.this);
+                try {
+                    UsersListSigleton.INSTANCE.unfollowUser(username);
+                    notifyObservers(UsersListModel.this);
+                } catch (TweetUserNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }
 
-    public void unfollowUser(String username) throws Exception {
+    public void unfollowUser(String username) throws TweetUserNotFoundException, MalformedURLException {
 
         UsersListSigleton.INSTANCE.unfollowUser(username);
         notifyObservers(this);
@@ -72,14 +81,22 @@ public class UsersListModel extends SimpleObservable<UsersListModel> {
         client.unfollowUser(username, new UsersListClient.IFollowUnfollowStatus() {
             @Override
             public void success(String username) {
-                UsersListSigleton.INSTANCE.unfollowUser(username);
-                notifyObservers(UsersListModel.this);
+                try {
+                    UsersListSigleton.INSTANCE.unfollowUser(username);
+                    notifyObservers(UsersListModel.this);
+                } catch (TweetUserNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void failed(String username) {
-                UsersListSigleton.INSTANCE.followUser(username);
-                notifyObservers(UsersListModel.this);
+                try {
+                    UsersListSigleton.INSTANCE.followUser(username);
+                    notifyObservers(UsersListModel.this);
+                } catch (TweetUserNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

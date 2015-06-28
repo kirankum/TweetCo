@@ -2,10 +2,9 @@ package com.tweetco.models.tweets;
 
 import com.google.gson.JsonObject;
 import com.tweetco.activities.ApiInfo;
-import com.tweetco.clients.TweetsListClient;
+import com.tweetco.clients.TweetsClient;
 import com.tweetco.dao.Tweet;
 import com.tweetco.dao.TweetUser;
-import com.tweetco.datastore.IteratorAsKeyReplyTweetsListSingleton;
 import com.tweetco.datastore.TweetsListSingleton;
 import com.tweetco.datastore.UsersListSigleton;
 
@@ -17,7 +16,7 @@ import java.util.List;
  * Created by kirankum on 6/26/2015.
  */
 public class TweetModel {
-    private TweetsListClient client = new TweetsListClient();
+    private TweetsClient client = new TweetsClient();
 
     public void refreshTweetFromServer(String tweetIterator) throws MalformedURLException {
         List<Tweet> tweets = new ArrayList<Tweet>();

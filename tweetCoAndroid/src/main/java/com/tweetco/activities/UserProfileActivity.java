@@ -37,8 +37,9 @@ import com.imagedisplay.util.AsyncTask;
 import com.imagedisplay.util.ImageFetcher;
 import com.imagedisplay.util.RecyclingBitmapDrawable;
 import com.imagedisplay.util.Utils;
+import com.tweetco.Exceptions.TweetUserNotFoundException;
 import com.tweetco.dao.TweetUser;
-import com.tweetco.tweetlist.UserFeedMode;
+import com.tweetco.datastore.UsersListSigleton;
 import com.tweetco.tweets.TweetCommonData;
 import com.tweetco.utility.UiUtility;
 
@@ -74,11 +75,15 @@ public class UserProfileActivity extends FragmentActivity
         setContentView(R.layout.userprofilefragment);
        
         mUserName = getIntent().getExtras().getString(Constants.USERNAME_STR);
-        TweetUser user = TweetCommonData.tweetUsers.get(mUserName.toLowerCase());
-        
-        loadUser(user);
-    		
-    }
+		try {
+			TweetUser user = UsersListSigleton.INSTANCE.getUser(mUserName.toLowerCase());
+
+			loadUser(user);
+		} catch (TweetUserNotFoundException e) {
+			e.printStackTrace();
+		}
+
+	}
     
     public void loadUser(final TweetUser user)
     {
@@ -164,7 +169,7 @@ public class UserProfileActivity extends FragmentActivity
     		}
     		else
     		{
-    			FrameLayout layout = UiUtility.getView(this, R.id.tweetsListFragmentContainer);
+    			/*FrameLayout layout = UiUtility.getView(this, R.id.tweetsListFragmentContainer);
     			layout.setVisibility(View.VISIBLE);
     			
                 final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -175,7 +180,7 @@ public class UserProfileActivity extends FragmentActivity
                 bundle.putBoolean("hideFooter", true);
                 tweetListFragment.setArguments(bundle);
                 ft.replace(R.id.tweetsListFragmentContainer, tweetListFragment);
-                ft.commit();
+                ft.commit();*/
     		}
     		
     		
@@ -353,9 +358,9 @@ public class UserProfileActivity extends FragmentActivity
 		{
 			if (requestCode == EDIT_PROFILE_REQUEST || resultCode == RESULT_OK)
 			{
-				TweetUser user = TweetCommonData.tweetUsers.get(mUserName.toLowerCase());
+				/*TweetUser user = TweetCommonData.tweetUsers.get(mUserName.toLowerCase());
 		        
-		        reloadUser(user);
+		        reloadUser(user);*/
 
 			}
 		}

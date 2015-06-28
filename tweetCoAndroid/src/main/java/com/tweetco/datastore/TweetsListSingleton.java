@@ -1,6 +1,9 @@
 package com.tweetco.datastore;
 
+import com.tweetco.Exceptions.LeaderboardUserNotFoundException;
+import com.tweetco.Exceptions.TweetNotFoundException;
 import com.tweetco.dao.Tweet;
+import com.tweetco.datastore.helper.Helper;
 import com.tweetco.interfaces.OnChangeListener;
 import com.tweetco.interfaces.SimpleObservable;
 
@@ -36,13 +39,47 @@ public enum TweetsListSingleton {
         observers.notifyObservers(null);
     }
 
-    public Tweet getTweet(int iterator) throws Exception {
+    public Tweet getTweet(int iterator) throws TweetNotFoundException {
         Tweet tweet = tweetsMap.get(iterator);
         if(tweet == null) {
-            //TODO Throw specific exception
-            throw new Exception();
+            throw new TweetNotFoundException();
         }
 
         return tweet;
     }
+
+    public void upvoteTweet(int iterator) throws TweetNotFoundException, LeaderboardUserNotFoundException {
+        Tweet tweet = getTweet(iterator);
+        tweet.upvoters = Helper.addCurrentUsername(tweet.upvoters);
+        LeaderboardListSingleton.INSTANCE.incrementUpvoteCount(tweet.tweetowner);
+    }
+
+    public void unUpvoteTweet(int iterator) throws TweetNotFoundException, LeaderboardUserNotFoundException {
+        Tweet tweet = getTweet(iterator);
+        tweet.upvoters = Helper.removeCurrentUsername(tweet.upvoters);
+        LeaderboardListSingleton.INSTANCE.decrementUpvoteCount(tweet.tweetowner);
+    }
+
+    public void bookmarkTweet(int iterator) throws TweetNotFoundException, LeaderboardUserNotFoundException {
+        Tweet tweet = getTweet(iterator);
+        tweet.bookmarkers = Helper.addCurrentUsername(tweet.bookmarkers);
+        LeaderboardListSingleton.INSTANCE.incrementBookmarksCount(tweet.tweetowner);
+    }
+
+    public void unBookmarkTweet(int iterator) throws TweetNotFoundException, LeaderboardUserNotFoundException {
+        Tweet tweet = getTweet(iterator);
+        tweet.bookmarkers = Helper.removeCurrentUsername(tweet.bookmarkers);
+        LeaderboardListSingleton.INSTANCE.decrementBookmarksCount(tweet.tweetowner);
+    }
+
+    public void hideTweet(int iterator ) throws TweetNotFoundException, LeaderboardUserNotFoundException {
+        Tweet tweet = getTweet(iterator);
+        tweet.hiders = Helper.addCurrentUsername(tweet.hiders);
+    }
+
+    public void unHideTweet(int iterator ) throws TweetNotFoundException, LeaderboardUserNotFoundException {
+        Tweet tweet = getTweet(iterator);
+        tweet.hiders = Helper.removeCurrentUsername(tweet.hiders);
+    }
+
 }

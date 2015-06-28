@@ -24,12 +24,10 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.onefortybytes.R;
 import com.tweetco.TweetCo;
-import com.tweetco.activities.PageLoader.OnLoadCompletedCallback;
 import com.tweetco.dao.Tweet;
 import com.tweetco.dao.TweetUser;
 import com.tweetco.datastore.TweetsListSingleton;
 import com.tweetco.datastore.UsersListSigleton;
-import com.tweetco.tweetlist.TweetListMode;
 import com.tweetco.tweets.TweetCommonData;
 import com.tweetco.utility.UiUtility;
 
@@ -60,6 +58,18 @@ public class TweetAdapter extends ArrayAdapter<Integer>
 		void onItemClick(int position);
 	}
 
+	public interface OnUpvoteClick {
+		void onItemClick(int iterator, boolean selected);
+	}
+
+	public interface OnBookmarkClick {
+		void onItemClick(int iterator, boolean selected);
+	}
+
+	public interface OnHideClick {
+		void onItemClick(int iterator, boolean selected);
+	}
+
 	private final Context mContext;
 	private ImageFetcher mImageFetcher; //Fetches the images
 
@@ -70,6 +80,9 @@ public class TweetAdapter extends ArrayAdapter<Integer>
 	private OnProfilePicClick mOnProfilePicClickCallback;
 	private OnTweetClick mOnTweetClickCallback;
 	private OnReplyClick mOnReplyClickCallback;
+	private OnUpvoteClick mOnUpvoteClick;
+	private OnBookmarkClick mOnBookmarkClick;
+	private OnHideClick mOnHideClick;
 
 	protected InfiniteScrollListPageListener mInfiniteListPageListener; 
 
@@ -108,7 +121,10 @@ public class TweetAdapter extends ArrayAdapter<Integer>
 		String OwenerName;
 	}
 
-	public TweetAdapter(Context context, int resource, List<Integer> objects, ImageFetcher imageFetcher, ImageFetcher imageFetcher2, OnProfilePicClick onProfilePicClickCallback, OnTweetClick onTweetClickCallback, OnReplyClick onReplyClickCallback)
+	public TweetAdapter(Context context, int resource, List<Integer> objects, ImageFetcher imageFetcher,
+						ImageFetcher imageFetcher2, OnProfilePicClick onProfilePicClickCallback,
+						OnTweetClick onTweetClickCallback, OnReplyClick onReplyClickCallback,
+						OnUpvoteClick onUpvoteClick, OnBookmarkClick onBookmarkClick, OnHideClick onHideClick)
 	{
 		super(context, resource, objects);
 		mContext = context;
@@ -118,6 +134,9 @@ public class TweetAdapter extends ArrayAdapter<Integer>
 		mOnProfilePicClickCallback = onProfilePicClickCallback;
 		mOnTweetClickCallback = onTweetClickCallback;
 		mOnReplyClickCallback = onReplyClickCallback;
+		mOnBookmarkClick = onBookmarkClick;
+		mOnHideClick = onHideClick;
+		mOnUpvoteClick = onUpvoteClick;
 	}
 
 	@Override
@@ -273,7 +292,7 @@ public class TweetAdapter extends ArrayAdapter<Integer>
 						upvoteView.startAnimation(AnimationUtils.loadAnimation(TweetCo.mContext, R.anim.animation));
 						upvoteView.setSelected(true);
 						ViewHolderForBookmarkUpVoteAndHide holder = (ViewHolderForBookmarkUpVoteAndHide) upvoteView.getTag();
-						upVote(upvoteView,TweetCommonData.getUserName(), holder.iterator, holder.OwenerName);
+						mOnUpvoteClick.onItemClick(holder.iterator, true);
 					}
 
 				});
@@ -289,7 +308,7 @@ public class TweetAdapter extends ArrayAdapter<Integer>
 						bookmarkView.startAnimation(AnimationUtils.loadAnimation(TweetCo.mContext, R.anim.animation));
 						bookmarkView.setSelected(true);
 						ViewHolderForBookmarkUpVoteAndHide viewHolderBookMarkUpvoteAndHide = (ViewHolderForBookmarkUpVoteAndHide) bookmarkView.getTag();
-						bookmark(bookmarkView,TweetCommonData.getUserName(), viewHolderBookMarkUpvoteAndHide.iterator, viewHolderBookMarkUpvoteAndHide.OwenerName);
+						mOnBookmarkClick.onItemClick(viewHolderBookMarkUpvoteAndHide.iterator, true);
 					}
 				});
 
@@ -361,12 +380,11 @@ public class TweetAdapter extends ArrayAdapter<Integer>
 			imageView.setOnClickListener(new View.OnClickListener() {
 
 				@Override
-				public void onClick(View v) 
-				{
-					Intent intent = new Intent(TweetCo.mContext,ImageViewActivity.class);
+				public void onClick(View v) {
+					Intent intent = new Intent(TweetCo.mContext, ImageViewActivity.class);
 					intent.putExtra(Constants.IMAGE_TO_VIEW, tweet.imageurl);
 					intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);
-					TweetCo.mContext.startActivity(intent);				
+					TweetCo.mContext.startActivity(intent);
 				}
 			});
 		}
@@ -418,124 +436,4 @@ public class TweetAdapter extends ArrayAdapter<Integer>
 	{
 		this.mInfiniteListPageListener = infiniteListPageListener;
 	}
-
-
-
-
-	public void upVote(final View upvoteView, final String requestingUser,final int iterator,String tweetOwner)
-	{
-		MobileServiceClient mClient = TweetCommonData.mClient;
-		JsonObject obj = new JsonObject();
-		obj.addProperty(ApiInfo.kRequestingUserKey, requestingUser);
-		obj.addProperty(ApiInfo.kIteratorKey, iterator);
-		obj.addProperty(ApiInfo.kTweetOwner, tweetOwner);
-		mClient.invokeApi(ApiInfo.UPVOTE, obj, new ApiJsonOperationCallback() {
-
-			@Override
-			public void onCompleted(JsonElement arg0, Exception arg1,
-					ServiceFilterResponse arg2) 
-			{
-				ViewHolderForBookmarkUpVoteAndHide viewHolderBookMarkUpvoteAndHide = (ViewHolderForBookmarkUpVoteAndHide) upvoteView.getTag();
-				if(arg1 == null)
-				{
-					//This will ensure that we are dealing with the same view
-					if(upvoteView!=null && (viewHolderBookMarkUpvoteAndHide.iterator == iterator))
-					{
-						upvoteView.setSelected(true);
-						//TODO change the adapter underneath
-						Tweet tweet = (Tweet)TweetAdapter.this.getItem(viewHolderBookMarkUpvoteAndHide.position);
-						TweetCommonData.like(tweet,TweetCommonData.getUserName());
-						upvoteView.invalidate();
-					}
-
-				}
-				else
-				{
-					//This will ensure that we are dealing with the same view
-					if(upvoteView!=null && (viewHolderBookMarkUpvoteAndHide.iterator == iterator))
-					{
-						upvoteView.setSelected(false);
-						upvoteView.invalidate();
-					}
-					Log.e(TAG,"Exception upVoting a tweet") ;
-					arg1.printStackTrace();
-				}
-
-			}
-		},false);
-	}
-
-	public void bookmark(final View bookmarkView,final String requestingUser,final int iterator,String tweetOwner)
-	{
-		MobileServiceClient mClient = TweetCommonData.mClient;
-		JsonObject obj = new JsonObject();
-		obj.addProperty(ApiInfo.kRequestingUserKey, requestingUser);
-		obj.addProperty(ApiInfo.kIteratorKey, iterator);
-		obj.addProperty(ApiInfo.kTweetOwner, tweetOwner);
-		mClient.invokeApi(ApiInfo.BOOKMARK, obj, new ApiJsonOperationCallback() 
-		{
-
-			@Override
-			public void onCompleted(JsonElement arg0, Exception arg1,
-					ServiceFilterResponse arg2) 
-			{
-				ViewHolderForBookmarkUpVoteAndHide viewHolderBookMarkUpvoteAndHide = (ViewHolderForBookmarkUpVoteAndHide) bookmarkView.getTag();
-				if(arg1 == null)
-				{
-					//This will ensure that we are dealing with the same view
-					if(bookmarkView!=null && (viewHolderBookMarkUpvoteAndHide.iterator == iterator))
-					{
-						bookmarkView.setSelected(true);
-						Tweet tweet = (Tweet)TweetAdapter.this.getItem(viewHolderBookMarkUpvoteAndHide.position);
-						TweetCommonData.bookmark(tweet,TweetCommonData.getUserName());
-						bookmarkView.invalidate();
-					}			
-				}
-				else
-				{
-					//This will ensure that we are dealing with the same view
-					if(bookmarkView!=null && (viewHolderBookMarkUpvoteAndHide.iterator == iterator))
-					{
-						bookmarkView.setSelected(false);
-						bookmarkView.invalidate();
-					}
-					Log.e(TAG,"Exception bookmarking a tweet") ;
-					arg1.printStackTrace();
-				}
-				
-
-			}
-		},false);
-	}
-
-	public void hide(final View hideTweetView,final String requestingUser,int iterator)
-	{
-		MobileServiceClient mClient = TweetCommonData.mClient;
-		JsonObject obj = new JsonObject();
-		obj.addProperty(ApiInfo.kRequestingUserKey, requestingUser);
-		obj.addProperty(ApiInfo.kIteratorKey, iterator);
-		mClient.invokeApi(ApiInfo.HIDE_TWEET, obj, new ApiJsonOperationCallback() 
-		{
-
-			@Override
-			public void onCompleted(JsonElement arg0, Exception arg1,
-					ServiceFilterResponse arg2) 
-			{
-				if(arg1 == null)
-				{
-					ViewHolderForBookmarkUpVoteAndHide viewHolderBookMarkUpvoteAndHide = (ViewHolderForBookmarkUpVoteAndHide) hideTweetView.getTag();
-					//TODO change the adapter underneath
-					//TweetAdapter.this.removeItem(viewHolderBookMarkUpvoteAndHide.position);
-					//refreshAdapter();
-				}
-				else
-				{
-					Log.e(TAG,"Exception bookmarking a tweet") ;
-					arg1.printStackTrace();
-				}
-
-			}
-		},false);
-	}
-
 }

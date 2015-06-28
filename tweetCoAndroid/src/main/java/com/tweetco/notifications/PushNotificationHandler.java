@@ -13,9 +13,7 @@ import com.microsoft.windowsazure.mobileservices.RegistrationCallback;
 import com.onefortybytes.R;
 import com.tweetco.activities.AllInOneActivity;
 import com.tweetco.activities.Constants;
-import com.tweetco.activities.PageLoader;
 import com.tweetco.activities.TweetCoBaseActivity;
-import com.tweetco.tweetlist.HomeFeedMode;
 import com.tweetco.tweets.TweetCommonData;
 
 
@@ -71,8 +69,8 @@ public class PushNotificationHandler extends com.microsoft.windowsazure.notifica
 		if(TweetCoBaseActivity.isAppInForeground)
 		{
 			//TODO Move this to a service.
-			PageLoader loader = new PageLoader(new HomeFeedMode(TweetCommonData.getUserName()));
-			loader.loadTop(null);
+			/*PageLoader loader = new PageLoader(new HomeFeedMode(TweetCommonData.getUserName()));
+			loader.loadTop(null);*/
 		}
 		else
 		{			

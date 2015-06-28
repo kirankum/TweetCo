@@ -1,9 +1,13 @@
 package com.tweetco.datastore;
 
+import com.tweetco.Exceptions.TweetUserNotFoundException;
+import com.tweetco.dao.Tweet;
 import com.tweetco.dao.TweetUser;
 import com.tweetco.database.dao.Account;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,29 +26,42 @@ public enum UsersListSigleton {
         return usersList;
     }
 
-    public TweetUser getUser(String username)
+    public TweetUser getUser(String username) throws TweetUserNotFoundException
     {
+        TweetUser user = userListMap.get(username);
+
+        if(user == null ) {
+            throw new TweetUserNotFoundException();
+        }
         return userListMap.get(username);
     }
 
-    public TweetUser getCurrentUser()
+    public TweetUser getCurrentUser() throws TweetUserNotFoundException
     {
         return getUser(AccountSingleton.INSTANCE.getUserName());
     }
 
     public void updateUsersListFromServer(List<TweetUser> list)
     {
-        usersList.removeAll(list);
+        ArrayList<TweetUser> listWithoutDuplicates = new ArrayList<TweetUser>(new HashSet<TweetUser>(list));
 
-        usersList.addAll(list);
+        for(TweetUser user : listWithoutDuplicates) {
+            if(!usersList.contains(user)) {
+                usersList.add(user);
+            }
+            else {
+                int index = usersList.indexOf(user);
+                usersList.set(index, user);
+            }
+        }
 
-        for(TweetUser user : usersList)
+        for(TweetUser user : listWithoutDuplicates)
         {
             userListMap.put(user.username, user);
         }
     }
 
-    public void followUser(String username)
+    public void followUser(String username) throws TweetUserNotFoundException
     {
         TweetUser user = getUser(username);
         if(user != null)
@@ -56,7 +73,7 @@ public enum UsersListSigleton {
         currentUser.followees += username + ";";
     }
 
-    public void unfollowUser(String username)
+    public void unfollowUser(String username) throws TweetUserNotFoundException
     {
         TweetUser user = getUser(username);
         if(user != null)
@@ -68,7 +85,7 @@ public enum UsersListSigleton {
         currentUser.followees = removeUsername(currentUser.followees, username);
     }
 
-    private static String removeUsername(String usernameList, String username)
+    private static String removeUsername(String usernameList, String username) throws TweetUserNotFoundException
     {
         String[] list = usernameList.split(username+";");
         StringBuilder builder = new StringBuilder();

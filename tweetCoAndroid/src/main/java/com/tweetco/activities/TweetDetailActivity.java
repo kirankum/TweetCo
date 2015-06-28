@@ -27,9 +27,6 @@ import com.onefortybytes.R;
 import com.tweetco.TweetCo;
 import com.tweetco.dao.Tweet;
 import com.tweetco.dao.TweetUser;
-import com.tweetco.tweetlist.GetTweetForIteratorMode;
-import com.tweetco.tweetlist.TweetListMode;
-import com.tweetco.tweetlist.TweetRepliesFeedMode;
 import com.tweetco.tweets.TweetCommonData;
 import com.tweetco.utility.UiUtility;
 
@@ -121,8 +118,9 @@ public class TweetDetailActivity extends TweetCoBaseActivity
 			}
 		});
 		
-		TweetUser tweeter = (TweetUser) TweetCommonData.tweetUsers.get(tweet.tweetowner.toLowerCase());
-		if (tweet != null) 
+		//TweetUser tweeter = (TweetUser) TweetCommonData.tweetUsers.get(tweet.tweetowner.toLowerCase());
+		TweetUser tweeter = null;
+		if (tweet != null)
 		{
 			String username = null;
 			String displayName = null;
@@ -268,7 +266,7 @@ public class TweetDetailActivity extends TweetCoBaseActivity
 			Log.e(TAG, "TweetUser Not found for tweet with content "+tweet.tweetcontent);
 		}
 		
-		if(!TextUtils.isEmpty(tweet.replies))
+		/*if(!TextUtils.isEmpty(tweet.replies))
 		{
 			SetViewForReplies(viewholder, true);
 			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -293,7 +291,7 @@ public class TweetDetailActivity extends TweetCoBaseActivity
 	        tweetListFragment.setArguments(newBundle);
 	        ft.replace(R.id.sourcetweetInReplyToFragmentContainer, tweetListFragment);
 	        ft.commit();
-		}
+		}*/
 			
 		
 		ActionBar actionbar = getSupportActionBar();
