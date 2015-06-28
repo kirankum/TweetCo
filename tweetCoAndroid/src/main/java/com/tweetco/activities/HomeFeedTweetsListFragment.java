@@ -141,8 +141,7 @@ public class HomeFeedTweetsListFragment extends TweetListFragmentBase implements
                         model.refreshLatestTweetsFromServer();
                     }
                     else {
-                        initAdapter(HomeFeedTweetsListSingleton.INSTANCE.getHomeFeedTweets());
-                        mAdapter.notifyDataSetChanged();
+                        refreshUiOnUIThread();
                     }
 
                 }
@@ -159,6 +158,10 @@ public class HomeFeedTweetsListFragment extends TweetListFragmentBase implements
 
     @Override
     public void onChange(List<Integer> model) {
+        refreshUiOnUIThread();
+    }
+
+    private void refreshUiOnUIThread() {
         this.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
