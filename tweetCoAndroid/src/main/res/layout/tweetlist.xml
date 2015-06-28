@@ -6,12 +6,27 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true" >
 
-    <!-- com.tweetco.activities.QuickReturnListView -->
 
-<android.support.v4.widget.SwipeRefreshLayout 
+    <LinearLayout
+        android:id="@+id/linlaHeaderProgress"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <ProgressBar
+            android:id="@+id/pbHeaderProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </ProgressBar>
+    </LinearLayout>
+
+    <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/tweetList_swipe_refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
     <com.tweetco.activities.QuickReturnListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
@@ -28,49 +43,9 @@
         android:src="@drawable/ic_add_white_24dp"
         fab:fab_colorNormal="@color/accent"
         fab:fab_colorPressed="@color/accent_pressed"
-        fab:fab_colorRipple="@color/ripple" />
+        fab:fab_colorRipple="@color/ripple"
+        android:visibility="gone"/>
 
-    <!--
-    <LinearLayout
-        android:id="@+id/footer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:background="@color/post_tweet_color"
-        android:clickable="true"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingBottom="3dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="8dp" >
 
-        <EditText
-            android:id="@+id/typeTweet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="false"
-            android:longClickable="false"
-            android:layout_weight="1"
-            android:ems="10" android:hint="What's on your mind?" android:focusable="false">
-
-        </EditText>
-
-        <ImageView
-            android:id="@+id/gallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/gallery"  />
-
-        <ImageView
-            android:id="@+id/camera"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/camera" />
-        
-    </LinearLayout>
-    -->
 
 </FrameLayout>

@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
+import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.tweets.TweetCommonData;
 
 public class CustomUserProfileFragmentPagerAdapter extends FragmentStatePagerAdapter
@@ -53,23 +54,18 @@ public class CustomUserProfileFragmentPagerAdapter extends FragmentStatePagerAda
 	@Override
 	public Fragment getItem(int i)
 	{
-		/*Fragment fragment = new TweetListFragment();
-		Bundle bundle = new Bundle();
 		switch(i)
 		{
 		case 0:
-			UserFeedMode userFeedMode = new UserFeedMode(TweetCommonData.getUserName());
-			bundle.putParcelable(Constants.TWEET_LIST_MODE, userFeedMode);
-			bundle.putBoolean("hideFooter", true);
-            fragment.setArguments(bundle);
+			UserTweetsListFragment fragment = new UserTweetsListFragment();
+			Bundle bundle = new Bundle();
+			bundle.putString("username", AccountSingleton.INSTANCE.getUserName());
+			fragment.setArguments(bundle);
 			return fragment;
 		case 1:
-			BookmarksFeedMode bookMarksMode = new BookmarksFeedMode(TweetCommonData.getUserName());
-			bundle.putParcelable(Constants.TWEET_LIST_MODE, bookMarksMode);
-			bundle.putBoolean("hideFooter", true);
-            fragment.setArguments(bundle);
-			return fragment;
-		}*/
+			BookmarkedTweetsListFragment fragment1 = new BookmarkedTweetsListFragment();
+			return fragment1;
+		}
 		return null;
 	}
 

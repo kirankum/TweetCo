@@ -39,6 +39,7 @@ import com.imagedisplay.util.RecyclingBitmapDrawable;
 import com.imagedisplay.util.Utils;
 import com.tweetco.Exceptions.TweetUserNotFoundException;
 import com.tweetco.dao.TweetUser;
+import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.datastore.UsersListSigleton;
 import com.tweetco.tweets.TweetCommonData;
 import com.tweetco.utility.UiUtility;
@@ -169,18 +170,16 @@ public class UserProfileActivity extends FragmentActivity
     		}
     		else
     		{
-    			/*FrameLayout layout = UiUtility.getView(this, R.id.tweetsListFragmentContainer);
+    			FrameLayout layout = UiUtility.getView(this, R.id.tweetsListFragmentContainer);
     			layout.setVisibility(View.VISIBLE);
     			
                 final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                TweetListFragment tweetListFragment = new TweetListFragment();
-                Bundle bundle = new Bundle();
-                UserFeedMode mode = new UserFeedMode(mUserName);
-                bundle.putParcelable(Constants.TWEET_LIST_MODE, mode);
-                bundle.putBoolean("hideFooter", true);
-                tweetListFragment.setArguments(bundle);
-                ft.replace(R.id.tweetsListFragmentContainer, tweetListFragment);
-                ft.commit();*/
+				UserTweetsListFragment fragment = new UserTweetsListFragment();
+				Bundle bundle = new Bundle();
+				bundle.putString("username", mUserName);
+				fragment.setArguments(bundle);
+                ft.replace(R.id.tweetsListFragmentContainer, fragment);
+                ft.commit();
     		}
     		
     		

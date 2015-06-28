@@ -16,46 +16,44 @@ public enum UserAsKeyTweetsListSingleton {
     INSTANCE;
 
     private HashMap<String, LinkedList<Integer>> usernameAsKeyTweets = new HashMap<String, LinkedList<Integer>>();
-    private HashMap<String, SimpleObservable<LinkedList<Integer>>> observers = new HashMap<String, SimpleObservable<LinkedList<Integer>>>();
+    private HashMap<String, SimpleObservable<List<Integer>>> observers = new HashMap<String, SimpleObservable<List<Integer>>>();
 
-    public void addListener(String username, OnChangeListener<LinkedList<Integer>> listener) {
-        SimpleObservable<LinkedList<Integer>> observer = observers.get(username);
+    public void addListener(String username, OnChangeListener<List<Integer>> listener) {
+        SimpleObservable<List<Integer>> observer = observers.get(username);
         if(observer == null) {
-            observer = new SimpleObservable<LinkedList<Integer>>();
+            observer = new SimpleObservable<List<Integer>>();
+            observers.put(username, observer);
         }
         observer.addListener(listener);
+
     }
 
-    public void removeListener(String username, OnChangeListener<LinkedList<Integer>> listener) {
-        SimpleObservable<LinkedList<Integer>> observer = observers.get(username);
-        if(observer == null) {
-            observer = new SimpleObservable<LinkedList<Integer>>();
+    public void removeListener(String username, OnChangeListener<List<Integer>> listener) {
+        SimpleObservable<List<Integer>> observer = observers.get(username);
+        if(observer != null) {
+            observer.removeListener(listener);
         }
-        observer.removeListener(listener);
+
     }
 
     public void updateTweetsListForUserFromServer(String username, List<Tweet> list) {
         LinkedList<Integer> tweetsList = usernameAsKeyTweets.get(username);
         if(tweetsList == null) {
             tweetsList = new LinkedList<Integer>();
+            usernameAsKeyTweets.put(username, tweetsList);
         }
 
         TweetsListSingleton.INSTANCE.addAll(list);
         tweetsList.clear();
         tweetsList.addAll(Helper.getIteratorList(list));
-        SimpleObservable<LinkedList<Integer>> observer = observers.get(username);
+        SimpleObservable<List<Integer>> observer = observers.get(username);
         if(observer != null) {
             observer.notifyObservers(tweetsList);
         }
     }
 
     public List<Integer> getTweetsListForUser(String username) {
-        LinkedList<Integer> tweetsList = usernameAsKeyTweets.get(username);
-        if(tweetsList == null) {
-            tweetsList = new LinkedList<Integer>();
-        }
-
-        return tweetsList;
+        return usernameAsKeyTweets.get(username);
     }
 
 }

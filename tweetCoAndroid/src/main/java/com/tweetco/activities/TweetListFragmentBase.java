@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 
@@ -53,6 +54,7 @@ public class TweetListFragmentBase extends Fragment {
     private ImageFetcher mProfileImageFetcher;
     private ImageFetcher mTweetContentImageFetcher;
     private QuickReturnListView mListView;
+    protected LinearLayout linlaHeaderProgress;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
     protected ITweetListFragmentCallback mCallback;
 
@@ -78,7 +80,7 @@ public class TweetListFragmentBase extends Fragment {
         final View v = inflater.inflate(R.layout.tweetlist, container, false);
 
         mListView = (QuickReturnListView) v.findViewById(R.id.listView);
-        mListView.setAdapter(null);
+        linlaHeaderProgress = (LinearLayout) v.findViewById(R.id.linlaHeaderProgress);
 
         mSwipeRefreshLayout = UiUtility.getView(v, R.id.tweetList_swipe_refresh_layout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

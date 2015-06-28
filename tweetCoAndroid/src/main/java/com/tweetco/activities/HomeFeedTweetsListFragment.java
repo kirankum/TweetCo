@@ -111,6 +111,7 @@ public class HomeFeedTweetsListFragment extends TweetListFragmentBase implements
         });
 
         mFloatingActionButton.attachToListView((ListView)activityViewRoot);
+        mFloatingActionButton.setVisibility(View.VISIBLE);
 
         return v;
     }
@@ -135,6 +136,12 @@ public class HomeFeedTweetsListFragment extends TweetListFragmentBase implements
         new AsyncTask<Void, Void, Void>()
         {
             @Override
+            protected void onPreExecute() {
+                // SHOW THE SPINNER WHILE LOADING FEEDS
+                linlaHeaderProgress.setVisibility(View.VISIBLE);
+            }
+
+            @Override
             protected Void doInBackground(Void... params) {
                 try {
                     if(HomeFeedTweetsListSingleton.INSTANCE.getHomeFeedTweets().isEmpty()) {
@@ -151,6 +158,13 @@ public class HomeFeedTweetsListFragment extends TweetListFragmentBase implements
                 }
 
                 return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+
+                // HIDE THE SPINNER AFTER LOADING FEEDS
+                linlaHeaderProgress.setVisibility(View.GONE);
             }
 
         }.execute();
