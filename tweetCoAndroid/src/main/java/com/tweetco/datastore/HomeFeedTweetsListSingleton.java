@@ -59,5 +59,9 @@ public enum HomeFeedTweetsListSingleton {
 
         return iterator;
     }
+
+    public void notifyAllObservers() {
+        observers.notifyObservers(homeFeedTweets);
+    }
 }
 

@@ -20,6 +20,7 @@ import com.imagedisplay.util.AsyncTask;
 import com.imagedisplay.util.Utils;
 import com.onefortybytes.R;
 import com.tweetco.TweetCo;
+import com.tweetco.activities.helper.Helper;
 import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.datastore.HomeFeedTweetsListSingleton;
 import com.tweetco.datastore.TrendingListSingleton;
@@ -46,6 +47,7 @@ public class HomeFeedTweetsListFragment extends TweetListFragmentBase implements
 
         super.onCreate(savedInstanceState);
         model = new HomeFeedTweetsModel();
+        baseModel = model;
         mCallback = new ITweetListFragmentCallback() {
             @Override
             public void onScroll() {
@@ -105,12 +107,12 @@ public class HomeFeedTweetsListFragment extends TweetListFragmentBase implements
 
             @Override
             public void onClick(View v) {
-                launchPostTweetActivity("",-1,null);
+                Helper.launchPostTweetActivity(HomeFeedTweetsListFragment.this.getActivity(), "", -1, null);
 
             }
         });
 
-        mFloatingActionButton.attachToListView((ListView)activityViewRoot);
+        mFloatingActionButton.attachToListView((ListView) activityViewRoot);
         mFloatingActionButton.setVisibility(View.VISIBLE);
 
         return v;
@@ -215,18 +217,6 @@ public class HomeFeedTweetsListFragment extends TweetListFragmentBase implements
                 }.execute();
             }
         }
-    }
-
-    private void launchPostTweetActivity(String existingString, int replySourceTweetIterator, String replySourceTweetUsername)
-    {
-        Intent intent = new Intent(this.getActivity().getApplicationContext(),PostTweetActivity.class);
-        intent.putExtra(Constants.EXISTING_STRING, existingString);
-        if(!TextUtils.isEmpty(replySourceTweetUsername))
-        {
-            intent.putExtra(Constants.INTENT_EXTRA_REPLY_SOURCE_TWEET_USERNAME, replySourceTweetUsername);
-            intent.putExtra(Constants.INTENT_EXTRA_REPLY_SOURCE_TWEET_ITERATOR, replySourceTweetIterator);
-        }
-        this.getActivity().startActivityForResult(intent, Constants.POSTED_TWEET_REQUEST_CODE);
     }
 
 }

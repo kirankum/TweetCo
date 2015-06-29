@@ -15,8 +15,9 @@ public class TweetsBaseModel {
 
     protected TweetsClient client = new TweetsClient();
 
-    public void upvoteTweet(int iterator, String tweetOwnerUsername) throws MalformedURLException, TweetNotFoundException, LeaderboardUserNotFoundException {
+    public void upvoteTweet(int iterator) throws MalformedURLException, TweetNotFoundException, LeaderboardUserNotFoundException {
         TweetsListSingleton.INSTANCE.upvoteTweet(iterator);
+        String tweetOwnerUsername = TweetsListSingleton.INSTANCE.getTweet(iterator).tweetowner;
         client.upvoteTweet(iterator, tweetOwnerUsername, new TweetsClient.IStatusCallback() {
             @Override
             public void success(int iterator) {
@@ -36,8 +37,9 @@ public class TweetsBaseModel {
         });
     }
 
-    public void bookmarkTweet(int iterator, String tweetOwnerUsername) throws MalformedURLException, TweetNotFoundException, LeaderboardUserNotFoundException {
+    public void bookmarkTweet(int iterator) throws MalformedURLException, TweetNotFoundException, LeaderboardUserNotFoundException {
         TweetsListSingleton.INSTANCE.bookmarkTweet(iterator);
+        String tweetOwnerUsername = TweetsListSingleton.INSTANCE.getTweet(iterator).tweetowner;
         client.bookmarkTweet(iterator, tweetOwnerUsername, new TweetsClient.IStatusCallback() {
             @Override
             public void success(int iterator) {

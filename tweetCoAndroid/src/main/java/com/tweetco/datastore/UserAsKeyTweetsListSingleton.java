@@ -56,4 +56,11 @@ public enum UserAsKeyTweetsListSingleton {
         return usernameAsKeyTweets.get(username);
     }
 
+    public void notifyAllObservers() {
+        for(String username : observers.keySet()) {
+            SimpleObservable<List<Integer>> observer = observers.get(username);
+            observer.notifyObservers(usernameAsKeyTweets.get(username));
+        }
+
+    }
 }

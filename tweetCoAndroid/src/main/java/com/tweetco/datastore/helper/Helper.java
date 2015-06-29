@@ -1,5 +1,7 @@
 package com.tweetco.datastore.helper;
 
+import android.text.TextUtils;
+
 import com.tweetco.dao.Tweet;
 import com.tweetco.datastore.AccountSingleton;
 
@@ -37,7 +39,19 @@ public class Helper {
     }
 
     public static String addCurrentUsername(String usernameList) {
-        return usernameList + usernameList + ";";
+        String currentUsername = AccountSingleton.INSTANCE.getUserName();
+        if(TextUtils.isEmpty(usernameList)) {
+            return currentUsername + ";";
+        }
+        else {
+            if(!usernameList.contains(";" +currentUsername + ";") && !usernameList.equals(currentUsername + ";")) {
+                return usernameList + AccountSingleton.INSTANCE.getUserName() + ";";
+            }
+            else {
+                return usernameList;
+            }
+
+        }
     }
 
 }

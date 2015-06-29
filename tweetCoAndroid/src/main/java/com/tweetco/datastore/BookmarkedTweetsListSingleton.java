@@ -38,4 +38,8 @@ public enum BookmarkedTweetsListSingleton {
         return bookmarkedTweets;
     }
 
+    public void notifyAllObservers() {
+        observers.notifyObservers(bookmarkedTweets);
+    }
+
 }

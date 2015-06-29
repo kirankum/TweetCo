@@ -16,9 +16,7 @@ import java.util.List;
 /**
  * Created by kirankum on 6/26/2015.
  */
-public class BookmarkedTweetsModel {
-
-    private TweetsClient client = new TweetsClient();
+public class BookmarkedTweetsModel extends TweetsBaseModel {
 
     public void refreshBookmarkedTweetsListFromServer() throws MalformedURLException {
         List<Tweet> tweets = new ArrayList<Tweet>();

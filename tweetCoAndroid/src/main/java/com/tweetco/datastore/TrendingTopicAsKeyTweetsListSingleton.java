@@ -53,4 +53,12 @@ public enum TrendingTopicAsKeyTweetsListSingleton {
     public List<Integer> getTweetsListForTopic(String topic) {
         return trendingTopicAsKeyTweets.get(topic);
     }
+
+    public void notifyAllObservers() {
+        for(String topic : observers.keySet()) {
+            SimpleObservable<List<Integer>> observer = observers.get(topic);
+            observer.notifyObservers(trendingTopicAsKeyTweets.get(topic));
+        }
+
+    }
 }

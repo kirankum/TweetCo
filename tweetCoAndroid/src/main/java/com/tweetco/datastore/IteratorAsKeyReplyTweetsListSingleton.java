@@ -15,26 +15,26 @@ import java.util.List;
 public enum IteratorAsKeyReplyTweetsListSingleton {
     INSTANCE;
 
-    private HashMap<String, LinkedList<Integer>> iteratorAsKeyReplyTweets = new HashMap<String, LinkedList<Integer>>();
-    private HashMap<String, SimpleObservable<LinkedList<Integer>>> observers = new HashMap<String, SimpleObservable<LinkedList<Integer>>>();
+    private HashMap<String, List<Integer>> iteratorAsKeyReplyTweets = new HashMap<String, List<Integer>>();
+    private HashMap<String, SimpleObservable<List<Integer>>> observers = new HashMap<String, SimpleObservable<List<Integer>>>();
 
-    public void addListener(String iterator, OnChangeListener<LinkedList<Integer>> listener) {
-        SimpleObservable<LinkedList<Integer>> observer = observers.get(iterator);
+    public void addListener(String iterator, OnChangeListener<List<Integer>> listener) {
+        SimpleObservable<List<Integer>> observer = observers.get(iterator);
         if(observer == null) {
-            observer = new SimpleObservable<LinkedList<Integer>>();
+            observer = new SimpleObservable<List<Integer>>();
         }
         observer.addListener(listener);
     }
-    public void removeListener(String iterator, OnChangeListener<LinkedList<Integer>> listener) {
-        SimpleObservable<LinkedList<Integer>> observer = observers.get(iterator);
+    public void removeListener(String iterator, OnChangeListener<List<Integer>> listener) {
+        SimpleObservable<List<Integer>> observer = observers.get(iterator);
         if(observer == null) {
-            observer = new SimpleObservable<LinkedList<Integer>>();
+            observer = new SimpleObservable<List<Integer>>();
         }
         observer.removeListener(listener);
     }
 
     public void updateReplyTweetsListForIteratorFromServer(String iterator, List<Tweet> list) {
-        LinkedList<Integer> tweetsList = iteratorAsKeyReplyTweets.get(iterator);
+        List<Integer> tweetsList = iteratorAsKeyReplyTweets.get(iterator);
         if(tweetsList == null) {
             tweetsList = new LinkedList<Integer>();
         }
@@ -42,17 +42,25 @@ public enum IteratorAsKeyReplyTweetsListSingleton {
         TweetsListSingleton.INSTANCE.addAll(list);
         tweetsList.clear();
         tweetsList.addAll(Helper.getIteratorList(list));
-        SimpleObservable<LinkedList<Integer>> observer = observers.get(iterator);
+        SimpleObservable<List<Integer>> observer = observers.get(iterator);
         if(observer != null) {
             observer.notifyObservers(tweetsList);
         }
     }
 
     public List<Integer> getRepliesForIterator(String iterator) {
-        LinkedList<Integer> tweetsList = iteratorAsKeyReplyTweets.get(iterator);
+        List<Integer> tweetsList = iteratorAsKeyReplyTweets.get(iterator);
         if(tweetsList == null) {
             tweetsList = new LinkedList<Integer>();
         }
         return tweetsList;
+    }
+
+    public void notifyAllObservers() {
+        for(String iterator : observers.keySet()) {
+            SimpleObservable<List<Integer>> observer = observers.get(iterator);
+            observer.notifyObservers(iteratorAsKeyReplyTweets.get(iterator));
+        }
+
     }
 }

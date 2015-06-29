@@ -25,16 +25,21 @@ import android.widget.PopupWindow;
 
 import com.example.floatingactionbuttonexample.FloatingActionButton;
 import com.example.floatingactionbuttonexample.ScrollDirectionListener;
+import com.imagedisplay.util.AsyncTask;
 import com.imagedisplay.util.ImageFetcher;
 import com.imagedisplay.util.Utils;
 import com.onefortybytes.R;
+import com.tweetco.Exceptions.LeaderboardUserNotFoundException;
 import com.tweetco.Exceptions.TweetNotFoundException;
 import com.tweetco.TweetCo;
+import com.tweetco.activities.helper.Helper;
 import com.tweetco.dao.Tweet;
 import com.tweetco.datastore.TweetsListSingleton;
+import com.tweetco.models.tweets.TweetsBaseModel;
 import com.tweetco.tweets.TweetCommonData;
 import com.tweetco.utility.UiUtility;
 
+import java.net.MalformedURLException;
 import java.util.List;
 
 /**
@@ -50,6 +55,7 @@ public class TweetListFragmentBase extends Fragment {
     private static final String TAG = "TweetListFragment";
 
     protected TweetAdapter mAdapter;
+    protected TweetsBaseModel baseModel;
 
     private ImageFetcher mProfileImageFetcher;
     private ImageFetcher mTweetContentImageFetcher;
@@ -222,27 +228,82 @@ public class TweetListFragmentBase extends Fragment {
                 try {
                     int iterator = tweetIteratorList.get(position);
                     Tweet tweet = TweetsListSingleton.INSTANCE.getTweet(iterator);
-                    //launchPostTweetActivity("@"+tweet.tweetowner+" ", tweet.iterator, tweet.tweetowner);
+                    Helper.launchPostTweetActivity(TweetListFragmentBase.this.getActivity(), "@" + tweet.tweetowner + " ", tweet.iterator, tweet.tweetowner);
                 } catch (TweetNotFoundException e) {
                     e.printStackTrace();
                 }
             }
         }, new TweetAdapter.OnUpvoteClick() {
             @Override
-            public void onItemClick(int iterator, boolean selected)
+            public void onItemClick(final int iterator, boolean selected)
             {
+
+                    new AsyncTask<Void, Void, Void>() {
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            try {
+                                baseModel.upvoteTweet(iterator);
+                            } catch (TweetNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            } catch (LeaderboardUserNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+                    }.execute();
 
             }
         }, new TweetAdapter.OnBookmarkClick() {
             @Override
-            public void onItemClick(int iterator, boolean selected)
+            public void onItemClick(final int iterator, boolean selected)
             {
+                    new AsyncTask<Void, Void, Void>() {
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            try {
+                                baseModel.bookmarkTweet(iterator);
+
+                            } catch (TweetNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            } catch (LeaderboardUserNotFoundException e) {
+                                e.printStackTrace();
+                            }
+                            return null;
+                        }
+                    }.execute();
+
 
             }
         }, new TweetAdapter.OnHideClick() {
             @Override
-            public void onItemClick(int iterator, boolean selected)
+            public void onItemClick(final int iterator, boolean selected)
             {
+
+                    new AsyncTask<Void, Void, Void>() {
+
+                        @Override
+                        protected Void doInBackground(Void... params) {
+                            try {
+                                baseModel.hideTweet(iterator);
+
+                            } catch (TweetNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (MalformedURLException e) {
+                                e.printStackTrace();
+                            } catch (LeaderboardUserNotFoundException e) {
+                                e.printStackTrace();
+                            }
+
+                            return null;
+                        }
+                    }.execute();
+
 
             }
         });

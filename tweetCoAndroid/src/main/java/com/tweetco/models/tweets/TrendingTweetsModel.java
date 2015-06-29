@@ -15,9 +15,7 @@ import java.util.List;
 /**
  * Created by kirankum on 6/26/2015.
  */
-public class TrendingTweetsModel {
-
-    private TweetsClient client = new TweetsClient();
+public class TrendingTweetsModel extends TweetsBaseModel {
 
     public void refreshTweetsOfTopicFromServer(String topic) throws MalformedURLException {
         List<Tweet> tweets = new ArrayList<Tweet>();

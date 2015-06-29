@@ -26,6 +26,7 @@ public class TrendingTopicTweetsListFragment extends TweetListFragmentBase imple
     {
         super.onCreate(savedInstanceState);
         model = new TrendingTweetsModel();
+        baseModel = model;
         mTopic = getArguments().getString("topic");
         mCallback = new ITweetListFragmentCallback() {
             @Override

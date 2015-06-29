@@ -27,6 +27,16 @@ public enum TweetsListSingleton {
         observers.removeListener(listener);
     }
 
+    public void notifyAllObservers() {
+        observers.notifyObservers(null);
+
+        BookmarkedTweetsListSingleton.INSTANCE.notifyAllObservers();
+        HomeFeedTweetsListSingleton.INSTANCE.notifyAllObservers();
+        IteratorAsKeyReplyTweetsListSingleton.INSTANCE.notifyAllObservers();
+        TrendingTopicAsKeyTweetsListSingleton.INSTANCE.notifyAllObservers();
+        UserAsKeyTweetsListSingleton.INSTANCE.notifyAllObservers();
+    }
+
     public void add(Tweet tweet) {
         tweetsMap.put(tweet.iterator, tweet);
         observers.notifyObservers(tweet);
@@ -52,34 +62,40 @@ public enum TweetsListSingleton {
         Tweet tweet = getTweet(iterator);
         tweet.upvoters = Helper.addCurrentUsername(tweet.upvoters);
         LeaderboardListSingleton.INSTANCE.incrementUpvoteCount(tweet.tweetowner);
+        notifyAllObservers();
     }
 
     public void unUpvoteTweet(int iterator) throws TweetNotFoundException, LeaderboardUserNotFoundException {
         Tweet tweet = getTweet(iterator);
         tweet.upvoters = Helper.removeCurrentUsername(tweet.upvoters);
         LeaderboardListSingleton.INSTANCE.decrementUpvoteCount(tweet.tweetowner);
+        notifyAllObservers();
     }
 
     public void bookmarkTweet(int iterator) throws TweetNotFoundException, LeaderboardUserNotFoundException {
         Tweet tweet = getTweet(iterator);
         tweet.bookmarkers = Helper.addCurrentUsername(tweet.bookmarkers);
         LeaderboardListSingleton.INSTANCE.incrementBookmarksCount(tweet.tweetowner);
+        notifyAllObservers();
     }
 
     public void unBookmarkTweet(int iterator) throws TweetNotFoundException, LeaderboardUserNotFoundException {
         Tweet tweet = getTweet(iterator);
         tweet.bookmarkers = Helper.removeCurrentUsername(tweet.bookmarkers);
         LeaderboardListSingleton.INSTANCE.decrementBookmarksCount(tweet.tweetowner);
+        notifyAllObservers();
     }
 
     public void hideTweet(int iterator ) throws TweetNotFoundException, LeaderboardUserNotFoundException {
         Tweet tweet = getTweet(iterator);
         tweet.hiders = Helper.addCurrentUsername(tweet.hiders);
+        notifyAllObservers();
     }
 
     public void unHideTweet(int iterator ) throws TweetNotFoundException, LeaderboardUserNotFoundException {
         Tweet tweet = getTweet(iterator);
         tweet.hiders = Helper.removeCurrentUsername(tweet.hiders);
+        notifyAllObservers();
     }
 
 }

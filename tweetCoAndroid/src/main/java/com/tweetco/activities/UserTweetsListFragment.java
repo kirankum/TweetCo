@@ -27,6 +27,7 @@ public class UserTweetsListFragment extends TweetListFragmentBase implements OnC
     {
         super.onCreate(savedInstanceState);
         model = new UserTweetsModel();
+        baseModel = model;
         mUsername = getArguments().getString("username");
         mCallback = new ITweetListFragmentCallback() {
             @Override

@@ -33,6 +33,7 @@ public class BookmarkedTweetsListFragment extends TweetListFragmentBase implemen
 
         super.onCreate(savedInstanceState);
         model = new BookmarkedTweetsModel();
+        baseModel = model;
         mCallback = new ITweetListFragmentCallback() {
             @Override
             public void onScroll() {
