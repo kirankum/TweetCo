@@ -2,8 +2,10 @@ package com.tweetco.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
+import android.view.MenuItem;
 
 import com.onefortybytes.R;
 import com.tweetco.dao.Tweet;
@@ -27,21 +29,36 @@ public class TrendingFragmentActivity extends TweetCoBaseActivity
 
 		mTag = getIntent().getExtras().getString(Constants.TREND_TAG_STR);
 
-		ActionBar actionbar = this.getSupportActionBar();
-		actionbar.setTitle(mTag);
+		ActionBar actionbar = getSupportActionBar();
+		if(actionbar!=null)
+		{
+			actionbar.setHomeButtonEnabled(true);
+			actionbar.setDisplayHomeAsUpEnabled(true);
+			actionbar.setTitle(mTag);
+		}
+
 
 		if(UiUtility.getView(this, R.id.trendingTweetsListFragmentContainer) != null)
 		{
-			/*final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-			tweetListFragment = new TweetListFragment();
+			final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			Fragment fragment = new TrendingTopicTweetsListFragment();
 			Bundle bundle = new Bundle();
-			TrendingFeedMode mode = new TrendingFeedMode(mTag);
-			bundle.putParcelable(Constants.TWEET_LIST_MODE, mode);
-			bundle.putString(Constants.FOOTER_TAG, "#"+mTag+" ");
-			tweetListFragment.setArguments(bundle);
-			ft.replace(R.id.trendingTweetsListFragmentContainer, tweetListFragment);
-			ft.commit();*/
+			bundle.putString("topic", mTag);
+			fragment.setArguments(bundle);
+			ft.replace(R.id.trendingTweetsListFragmentContainer, fragment);
+			ft.commit();
 		}
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			// Respond to the action bar's Up/Home button
+			case android.R.id.home:
+				finish();
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 
