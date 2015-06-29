@@ -349,7 +349,7 @@ public class TweetDetailActivity extends TweetCoBaseActivity
 	
 	public void bookmark(final View bookmarkView,final String requestingUser,final int iterator,String tweetOwner)
 	{
-		MobileServiceClient mClient = TweetCommonData.mClient;
+		/*MobileServiceClient mClient = TweetCommonData.mClient;
 		JsonObject obj = new JsonObject();
 		obj.addProperty(ApiInfo.kRequestingUserKey, requestingUser);
 		obj.addProperty(ApiInfo.kIteratorKey, iterator);
@@ -384,12 +384,12 @@ public class TweetDetailActivity extends TweetCoBaseActivity
 				}
 
 			}
-		},false);
+		},false);*/
 	}
 	
 	public void upVote(final View upvoteView,final String requestingUser,final int iterator,String tweetOwner)
 	{
-		MobileServiceClient mClient = TweetCommonData.mClient;
+		/*MobileServiceClient mClient = TweetCommonData.mClient;
 		JsonObject obj = new JsonObject();
 		obj.addProperty(ApiInfo.kRequestingUserKey, requestingUser);
 		obj.addProperty(ApiInfo.kIteratorKey, iterator);
@@ -425,7 +425,7 @@ public class TweetDetailActivity extends TweetCoBaseActivity
 				}
 
 			}
-		},false);
+		},false);*/
 	}
 	
 	private void setUpVoteFlag(ImageView imageView,Tweet linkedTweet,String userName)
@@ -501,13 +501,7 @@ public class TweetDetailActivity extends TweetCoBaseActivity
 	{
 		super.onResume();
 	}
-	
-	@Override
-	public void onResumeCallback() {
-		// TODO Auto-generated method stub
 
-	}
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {

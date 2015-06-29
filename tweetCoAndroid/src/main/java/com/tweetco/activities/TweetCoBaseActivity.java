@@ -44,15 +44,6 @@ public abstract class TweetCoBaseActivity extends ActionBarActivity
 		isAppInForeground = true;
 		NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		nm.cancelAll();
-		
-		if(TweetCommonData.mClient == null)
-		{
-			new InitializeTask().execute();
-		}
-		else
-		{
-			onResumeCallback();
-		}
 	}
 	
 	@Override
@@ -60,62 +51,5 @@ public abstract class TweetCoBaseActivity extends ActionBarActivity
 	{
 		super.onPause();
 		isAppInForeground = false;
-	}
-	
-	public abstract void onResumeCallback();
-	
-	private class InitializeTask extends AsyncTask<Void, Void, Account>
-	{
-		@Override
-		protected void onPreExecute()
-		{
-			Log.d("tag","onPreExecute");
-			setProgressBarIndeterminateVisibility(true);
-		}
-
-		@Override
-		protected void onPostExecute(Account result) 
-		{
-			Log.d(TAG,"AllInOneActivity post execute");
-			setProgressBarIndeterminateVisibility(false);
-			if(result == null)
-			{
-				Intent intent = new Intent(TweetCo.mContext,LauncherActivity.class);
-				TweetCo.mContext.startActivity(intent);
-				TweetCoBaseActivity.this.finish();
-			}
-			else
-			{
-				onResumeCallback();
-			}
-		}
-
-		@Override
-		protected Account doInBackground(Void... params) 
-		{
-			Account account = AccountSingleton.INSTANCE.getAccountModel().getAccountCopy();
-			if(account != null)
-			{
-
-				MobileServiceClient mobileServiceClient;
-				try 
-				{
-					if(TweetCommonData.mClient == null) {
-						mobileServiceClient = new MobileServiceClient(account.getServerAddress(), account.getAuthToken(), TweetCo.mContext);
-						MobileServiceUser user = new MobileServiceUser(account.getUsername());
-						mobileServiceClient.setCurrentUser(user);
-						TweetCommonData.mClient = mobileServiceClient;
-					}
-
-				} 
-				catch (MalformedURLException e) 
-				{
-					e.printStackTrace();
-				}
-
-			}
-			return account;
-		}
-
 	}
 }

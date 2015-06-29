@@ -17,10 +17,4 @@ public class AboutActivity extends TweetCoBaseActivity
 		setContentView(R.layout.posttweet);
 	}
 
-	@Override
-	public void onResumeCallback() {
-		// TODO Auto-generated method stub
-		
-	}
-		
 }

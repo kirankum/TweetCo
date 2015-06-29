@@ -34,9 +34,6 @@ public class UsersListActivity extends TweetCoBaseActivity
 		{
 			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 	        UsersListFragment usersListFragment = new UsersListFragment();
-	        Bundle newBundle = new Bundle();
-	        newBundle.putBoolean("hideFooter", true);
-	        usersListFragment.setArguments(newBundle);
 	        usersListFragment.addUser(usersList);
 	        ft.replace(R.id.usersListFragmentContainer, usersListFragment);
 	        ft.commit();
@@ -50,29 +47,16 @@ public class UsersListActivity extends TweetCoBaseActivity
 		}
 		
 	}
-	
-	@Override
-	public void onResume()
-	{
-		super.onResume();
-	}
-	
-	@Override
-	public void onResumeCallback() {
-		// TODO Auto-generated method stub
 
-	}
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    switch (item.getItemId()) {
-	    // Respond to the action bar's Up/Home button
-	    case android.R.id.home:
-	        //NavUtils.navigateUpFromSameTask(this);
-	        finish();
-	        return true;
-	    }
-	    return super.onOptionsItemSelected(item);
+		switch (item.getItemId()) {
+			// Respond to the action bar's Up/Home button
+			case android.R.id.home:
+				finish();
+				return true;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }

@@ -17,12 +17,14 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.imagedisplay.util.AsyncTask;
 import com.imagedisplay.util.ImageFetcher;
 import com.imagedisplay.util.Utils;
 import com.microsoft.windowsazure.notifications.NotificationsManager;
 import com.onefortybytes.R;
 import com.tweetco.dao.Tweet;
 import com.tweetco.database.dao.Account;
+import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.notifications.PushNotificationHandler;
 import com.tweetco.tweets.TweetCommonData;
 
@@ -47,20 +49,35 @@ public class AllInOneActivity extends TweetCoBaseActivity
 
 	private ViewPager mViewPager;
 	private static CustomFragmentPagerAdapter mPagerAdapter = null;
-	private Controller mController = null;
+	private ImageView mProfileImageView;
+	private TextView mProfileUsernameTextView;
+	private Account mAccount;
+	private ImageFetcher mImageFetcher;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		mController = new Controller();
 
 		setContentView(R.layout.all_in_one_activity_layout);
 
 		NotificationsManager.handleNotifications(this, SENDER_ID, PushNotificationHandler.class);
-		
+
+		mImageFetcher = Utils.getImageFetcher(this, 50, 50);
 
 		customizeActionBar();
+
+		mProfileImageView = (ImageView)m_actionbar.getCustomView().findViewById(R.id.imageView1);
+		mProfileImageView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(AllInOneActivity.this, UserProfileActivity.class);
+				intent.putExtra(Constants.USERNAME_STR, TweetCommonData.getUserName());
+				AllInOneActivity.this.startActivityForResult(intent, Constants.POSTED_TWEET_REQUEST_CODE);
+			}
+		});
+
+		mProfileUsernameTextView = (TextView)m_actionbar.getCustomView().findViewById(R.id.title);
 	}
 
 
@@ -90,22 +107,18 @@ public class AllInOneActivity extends TweetCoBaseActivity
 	{	
 		// init pager
 		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setOnPageChangeListener(new OnPageChangeListener()
-		{
+		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
-			public void onPageScrollStateChanged(int state)
-			{
+			public void onPageScrollStateChanged(int state) {
 			}
 
 			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2)
-			{
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
 			}
 
 			@Override
-			public void onPageSelected(int position)
-			{
+			public void onPageSelected(int position) {
 				hideKeyboard();
 			}
 		});
@@ -127,6 +140,25 @@ public class AllInOneActivity extends TweetCoBaseActivity
 	protected void onResume() 
 	{
 		super.onResume();
+
+		if(mAccount == null) {
+			new AsyncTask<Void, Void, Void>() {
+
+				@Override
+				protected Void doInBackground(Void... params) {
+					mAccount = AccountSingleton.INSTANCE.getAccountModel().getAccountCopy();
+					return null;
+				}
+
+				@Override
+				protected void onPostExecute(Void aVoid) {
+					initActivity();
+				}
+			}.execute();
+		}
+		else {
+			initActivity();
+		}
 	}
 
 	@Override
@@ -143,8 +175,7 @@ public class AllInOneActivity extends TweetCoBaseActivity
 		{
 			if(resultCode == RESULT_OK)
 			{
-				Tweet tweet =  data.getParcelableExtra(Constants.POSTED_TWEET);
-				mController.tweetsListRefresh(tweet);
+
 			}
 		}
 		else
@@ -153,53 +184,12 @@ public class AllInOneActivity extends TweetCoBaseActivity
 		}
 	}
 
-	public Controller getController()
-	{
-		return mController;
-	}
-
-
-	/**
-	 * All the actions that has to be done on the fragments will be done here.
-	 *
-	 */
-	public class Controller
-	{
-		public void tweetsListRefresh(Tweet tweet)
-		{
-			//Ideally we should call mPagerAdapter.getFragmentByClass(classname);
-			//TweetListFragment twwetListFragment = (TweetListFragment)mPagerAdapter.getRegisteredFragment(0);
-			//twwetListFragment.refreshTop();
-		}
-	}
-
-
-	@Override
-	public void onResumeCallback() 
+	public void initActivity()
 	{
 		initializePager();
-		
-		ImageView imageView = (ImageView)m_actionbar.getCustomView().findViewById(R.id.imageView1);
-		ImageFetcher imageFetcher = Utils.getImageFetcher(this, 50, 50);
-		
-		imageFetcher.loadImage(TweetCommonData.getAccount().profileimageurl, imageView);
-		
-		imageView.setOnClickListener(new View.OnClickListener() 
-		{	
-			@Override
-			public void onClick(View v) 
-			{
-				Intent intent = new Intent(AllInOneActivity.this , UserProfileActivity.class);
-				intent.putExtra(Constants.USERNAME_STR, TweetCommonData.getUserName());
-				AllInOneActivity.this.startActivityForResult(intent, Constants.POSTED_TWEET_REQUEST_CODE);
-			}
-		});
-		
-		Account account = TweetCommonData.getAccount();
-		if(account!=null)
-		{
-			((TextView)m_actionbar.getCustomView().findViewById(R.id.title)).setText(account.getUsername());
-		}
+
+		mProfileUsernameTextView.setText(mAccount.getUsername());
+		mImageFetcher.loadImage(mAccount.profileimageurl, mProfileImageView);
 	}
 	
 	@Override

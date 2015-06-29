@@ -14,8 +14,10 @@ import com.onefortybytes.R;
 import com.tweetco.activities.AllInOneActivity;
 import com.tweetco.activities.Constants;
 import com.tweetco.activities.TweetCoBaseActivity;
+import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.tweets.TweetCommonData;
 
+import java.net.MalformedURLException;
 
 
 public class PushNotificationHandler extends com.microsoft.windowsazure.notifications.NotificationsHandler
@@ -33,23 +35,27 @@ public class PushNotificationHandler extends com.microsoft.windowsazure.notifica
 	public void onRegistered(Context context,  final String gcmRegistrationId) {
 		super.onRegistered(context, gcmRegistrationId);
 
-		TweetCommonData.mClient.getPush().register(gcmRegistrationId, new String[] {TweetCommonData.getUserName()},new RegistrationCallback() {
+		try {
+			AccountSingleton.INSTANCE.getMobileServiceClient().getPush().register(gcmRegistrationId, new String[] {TweetCommonData.getUserName()},new RegistrationCallback() {
 
-			@Override
-			public void onRegister(Registration registration, Exception exception) 
-			{
-				if(exception==null)
-				{
-					Log.d(TAG, "User device is successfully registered to receive push notifications");
-					Log.d(TAG, "Registration Id="+registration.getRegistrationId());
-					Log.d(TAG, "PNS Handle ="+registration.getPNSHandle());
-				}
-				else
-				{
-					exception.printStackTrace();
-				}
-			}
-		});
+                @Override
+                public void onRegister(Registration registration, Exception exception)
+                {
+                    if(exception==null)
+                    {
+                        Log.d(TAG, "User device is successfully registered to receive push notifications");
+                        Log.d(TAG, "Registration Id="+registration.getRegistrationId());
+                        Log.d(TAG, "PNS Handle ="+registration.getPNSHandle());
+                    }
+                    else
+                    {
+                        exception.printStackTrace();
+                    }
+                }
+            });
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

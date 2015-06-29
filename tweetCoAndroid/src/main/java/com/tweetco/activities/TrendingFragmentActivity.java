@@ -12,7 +12,6 @@ import com.tweetco.utility.UiUtility;
 public class TrendingFragmentActivity extends TweetCoBaseActivity 
 {
 	private String mTag = null;
-	//private TweetListFragment tweetListFragment = null;
 
 	/**
 	 * Empty constructor as per the Fragment documentation
@@ -45,28 +44,7 @@ public class TrendingFragmentActivity extends TweetCoBaseActivity
 		}
 	}
 
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		if(requestCode == Constants.POSTED_TWEET_REQUEST_CODE)
-		{
-			if(resultCode == RESULT_OK)
-			{
-				/*if(tweetListFragment!=null && tweetListFragment.isVisible())
-				{
-					Tweet tweet =  data.getParcelableExtra(Constants.POSTED_TWEET);
-					tweetListFragment.refreshTop();
-				}*/
-			}
-		}
-		else
-		{
-			super.onActivityResult(requestCode, resultCode, data);
-		}
-	}
 
-	@Override
-	public void onResumeCallback() {
-		
-	}
+
+
 }

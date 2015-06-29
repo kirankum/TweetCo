@@ -1,19 +1,11 @@
 package com.tweetco.activities;
 
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.imagedisplay.util.AsyncTask;
 import com.imagedisplay.util.ImageFetcher;
@@ -21,17 +13,10 @@ import com.imagedisplay.util.Utils;
 import com.onefortybytes.R;
 import com.tweetco.activities.adapter.LeaderboardAdapter;
 import com.tweetco.activities.adapter.LeaderboardAdapter.OnProfilePicClick;
-import com.tweetco.activities.progress.AsyncTaskEventHandler;
-import com.tweetco.asynctasks.GetLeaderboardTask;
-import com.tweetco.asynctasks.GetLeaderboardTask.GetLeaderboardTaskCompletionCallback;
 import com.tweetco.dao.LeaderboardUser;
-import com.tweetco.dao.TweetUser;
-import com.tweetco.datastore.AccountSingleton;
-import com.tweetco.datastore.HomeFeedTweetsListSingleton;
 import com.tweetco.datastore.LeaderboardListSingleton;
 import com.tweetco.interfaces.OnChangeListener;
 import com.tweetco.models.LeaderboardListModel;
-import com.tweetco.tweets.TweetCommonData;
 
 public class LeaderboardFragment extends ListFragmentWithSwipeRefreshLayout implements OnChangeListener<LeaderboardListModel>
 {

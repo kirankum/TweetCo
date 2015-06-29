@@ -20,15 +20,7 @@ import com.tweetco.database.dao.Account;
 
 public class TweetCommonData 
 {
-	//Use only one of these through out
-	public static MobileServiceClient mClient;
-	
-	//All the tweets that we are currently holding in memory    
-    public static LinkedMap<Integer,Tweet> homeFeedTweets = new LinkedMap<Integer, Tweet>();
-
-    public static Map<String,List<Tweet>> userTweetsList = new ConcurrentHashMap<String, List<Tweet>>();
-    
-    public static Account getAccount()
+	public static Account getAccount()
 	{
 		return AccountSingleton.INSTANCE.getAccountModel().getAccountCopy();
 	}

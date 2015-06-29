@@ -2,6 +2,7 @@ package com.tweetco.activities;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -54,6 +55,7 @@ import com.tweetco.asynctasks.PostTweetTask;
 import com.tweetco.asynctasks.PostTweetTask.PostTweetTaskCompletionCallback;
 import com.tweetco.asynctasks.PostTweetTaskParams;
 import com.tweetco.dao.TweetUser;
+import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.datastore.TrendingListSingleton;
 import com.tweetco.datastore.UsersListSigleton;
 import com.tweetco.tweets.TweetCommonData;
@@ -109,6 +111,10 @@ public class PostTweetActivity extends TweetCoBaseActivity
 			actionbar.setHomeButtonEnabled(true);
 			actionbar.setDisplayHomeAsUpEnabled(true);
 		}
+
+		Intent intent = getIntent();
+		replySourceTweetIterator = intent.getIntExtra(Constants.INTENT_EXTRA_REPLY_SOURCE_TWEET_ITERATOR, -1);
+		replySourceTweetUsername = intent.getStringExtra(Constants.INTENT_EXTRA_REPLY_SOURCE_TWEET_USERNAME);
 
 		mTweetContent = UiUtility.getView(this, R.id.tweetContent);
 		mContentTags = UiUtility.getView(this, R.id.contentTags);
@@ -272,51 +278,56 @@ public class PostTweetActivity extends TweetCoBaseActivity
 					
 					if(bPostTweet)
 					{
-						MobileServiceClient client = TweetCommonData.mClient;
-						PostTweetTaskParams params = new PostTweetTaskParams(client, TweetCommonData.getUserName());
-						params.setTweetContent(mTweetContent.getEditableText().toString());
-						params.setTweetImage((BitmapDrawable) mTweetImage.getDrawable());
-						params.setContentTags(mContentTags.getEditableText().toString());
-						params.setReplySourceTweetIterator(replySourceTweetIterator);
-						params.setReplySourceTweetUsername(replySourceTweetUsername);
-						params.setAnonymous(bAnonymous);
-						params.setPostToTwitter(mPostToTwitterCheckBox.isChecked());
-						params.setTwitterApp(mTwitter);
-						
-						new PostTweetTask(getApplicationContext(), params, asyncTaskEventHandler, new PostTweetTaskCompletionCallback() 
-						{
+						try {
+							//TODO Move this code to client
+							MobileServiceClient client = AccountSingleton.INSTANCE.getMobileServiceClient();
+							PostTweetTaskParams params = new PostTweetTaskParams(client, TweetCommonData.getUserName());
+							params.setTweetContent(mTweetContent.getEditableText().toString());
+							params.setTweetImage((BitmapDrawable) mTweetImage.getDrawable());
+							params.setContentTags(mContentTags.getEditableText().toString());
+							params.setReplySourceTweetIterator(replySourceTweetIterator);
+							params.setReplySourceTweetUsername(replySourceTweetUsername);
+							params.setAnonymous(bAnonymous);
+							params.setPostToTwitter(mPostToTwitterCheckBox.isChecked());
+							params.setTwitterApp(mTwitter);
 
-							@Override
-							public void onPostTweetTaskSuccess() 
-							{
-								asyncTaskEventHandler.dismiss();
-								Intent resultIntent = new Intent();
-								PostTweetActivity.this.setResult(RESULT_OK, resultIntent);
-								finish();
-							}
+							new PostTweetTask(getApplicationContext(), params, asyncTaskEventHandler, new PostTweetTaskCompletionCallback()
+                            {
 
-							@Override
-							public void onPostTweetTaskFailure() 
-							{
-								asyncTaskEventHandler.dismiss();
-								Log.e(TAG, "Posting tweet failed");
-								AlertDialogUtility.getAlertDialogOK(PostTweetActivity.this, "Failed to post your 140 bytes", new  DialogInterface.OnClickListener() {
-									
-									@Override
-									public void onClick(DialogInterface dialog, int which) {
-										// TODO Auto-generated method stub
-										
-									}
-								});
-							}
+                                @Override
+                                public void onPostTweetTaskSuccess()
+                                {
+                                    asyncTaskEventHandler.dismiss();
+                                    Intent resultIntent = new Intent();
+                                    PostTweetActivity.this.setResult(RESULT_OK, resultIntent);
+                                    finish();
+                                }
 
-							@Override
-							public void onPostTweetTaskCancelled() 
-							{
-								asyncTaskEventHandler.dismiss();
+                                @Override
+                                public void onPostTweetTaskFailure()
+                                {
+                                    asyncTaskEventHandler.dismiss();
+                                    Log.e(TAG, "Posting tweet failed");
+                                    AlertDialogUtility.getAlertDialogOK(PostTweetActivity.this, "Failed to post your 140 bytes", new  DialogInterface.OnClickListener() {
 
-							}
-						}).execute();
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // TODO Auto-generated method stub
+
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onPostTweetTaskCancelled()
+                                {
+                                    asyncTaskEventHandler.dismiss();
+
+                                }
+                            }).execute();
+						} catch (MalformedURLException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 				else
@@ -356,7 +367,6 @@ public class PostTweetActivity extends TweetCoBaseActivity
 		});
 		
 		// Get intent, action and MIME type
-	    Intent intent = getIntent();
 	    String action = intent.getAction();
 	    String type = intent.getType();
 	    String inputText = null;
@@ -560,14 +570,6 @@ public class PostTweetActivity extends TweetCoBaseActivity
 		}
 	}
 
-	@Override
-	public void onResumeCallback() 
-	{
-		Intent intent = getIntent();
-		replySourceTweetIterator = intent.getIntExtra(Constants.INTENT_EXTRA_REPLY_SOURCE_TWEET_ITERATOR, -1);
-		replySourceTweetUsername = intent.getStringExtra(Constants.INTENT_EXTRA_REPLY_SOURCE_TWEET_USERNAME);
-	}
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
