@@ -29,7 +29,7 @@ public class BookmarkedTweetsModel {
         client.getTweets(ApiInfo.GET_BOOKMARKED_TWEETS, obj, tweets, usersList);
 
         BookmarkedTweetsListSingleton.INSTANCE.updateBookmarksListFromServer(tweets);
-        UsersListSigleton.INSTANCE.updateUsersListFromServer(usersList);
+        UsersListSigleton.INSTANCE.updateCachedUsersList(usersList);
     }
 
 }

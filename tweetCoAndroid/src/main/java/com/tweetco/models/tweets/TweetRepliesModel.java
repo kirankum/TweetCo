@@ -27,6 +27,6 @@ public class TweetRepliesModel {
         client.getTweets(ApiInfo.GET_REPLY_TWEETS_FOR_TWEET, obj, tweets, usersList);
 
         IteratorAsKeyReplyTweetsListSingleton.INSTANCE.updateReplyTweetsListForIteratorFromServer(sourceTweetIterator, tweets);
-        UsersListSigleton.INSTANCE.updateUsersListFromServer(usersList);
+        UsersListSigleton.INSTANCE.updateCachedUsersList(usersList);
     }
 }

@@ -28,7 +28,7 @@ public class UserTweetsModel {
         client.getTweets(ApiInfo.GET_TWEETS_FOR_USER, obj, tweets, usersList);
 
         UserAsKeyTweetsListSingleton.INSTANCE.updateTweetsListForUserFromServer(username, tweets);
-        UsersListSigleton.INSTANCE.updateUsersListFromServer(usersList);
+        UsersListSigleton.INSTANCE.updateCachedUsersList(usersList);
     }
 
 }

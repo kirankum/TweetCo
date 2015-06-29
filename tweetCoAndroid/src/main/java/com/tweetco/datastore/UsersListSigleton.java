@@ -43,9 +43,10 @@ public enum UsersListSigleton {
 
     public void updateUsersListFromServer(List<TweetUser> list)
     {
-        ArrayList<TweetUser> listWithoutDuplicates = new ArrayList<TweetUser>(new HashSet<TweetUser>(list));
+        usersList.clear();
+        userListMap.clear();
 
-        for(TweetUser user : listWithoutDuplicates) {
+        for(TweetUser user : list) {
             if(!usersList.contains(user)) {
                 usersList.add(user);
             }
@@ -53,11 +54,20 @@ public enum UsersListSigleton {
                 int index = usersList.indexOf(user);
                 usersList.set(index, user);
             }
+
+            userListMap.put(user.username, user);
         }
 
-        for(TweetUser user : listWithoutDuplicates)
-        {
-            userListMap.put(user.username, user);
+    }
+
+    public void updateCachedUsersList(List<TweetUser> list)
+    {
+        for(TweetUser user : list) {
+            if(usersList.contains(user)) {
+                int index = usersList.indexOf(user);
+                usersList.set(index, user);
+                userListMap.put(user.username, user);
+            }
         }
     }
 

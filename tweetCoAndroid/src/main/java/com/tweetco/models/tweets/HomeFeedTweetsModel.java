@@ -32,7 +32,7 @@ public class HomeFeedTweetsModel {
         client.getTweets(ApiInfo.GET_TWEETS_FOR_USER, obj, tweets, usersList);
 
         HomeFeedTweetsListSingleton.INSTANCE.addHomeFeedsTweetToTop(tweets);
-        UsersListSigleton.INSTANCE.updateUsersListFromServer(usersList);
+        UsersListSigleton.INSTANCE.updateCachedUsersList(usersList);
     }
 
     public void refreshOlderTweetsFromServer() throws MalformedURLException {
@@ -47,6 +47,6 @@ public class HomeFeedTweetsModel {
         client.getTweets(ApiInfo.GET_TWEETS_FOR_USER, obj, tweets, usersList);
 
         HomeFeedTweetsListSingleton.INSTANCE.addHomeFeedsTweetToBottom(tweets);
-        UsersListSigleton.INSTANCE.updateUsersListFromServer(usersList);
+        UsersListSigleton.INSTANCE.updateCachedUsersList(usersList);
     }
 }

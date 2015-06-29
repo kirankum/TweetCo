@@ -29,6 +29,6 @@ public class TweetModel {
         if(!tweets.isEmpty()) {
             TweetsListSingleton.INSTANCE.add(tweets.get(0));
         }
-        UsersListSigleton.INSTANCE.updateUsersListFromServer(usersList);
+        UsersListSigleton.INSTANCE.updateCachedUsersList(usersList);
     }
 }

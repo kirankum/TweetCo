@@ -28,6 +28,6 @@ public class TrendingTweetsModel {
         client.getTweets(ApiInfo.GET_TWEETS_FOR_TREND, obj, tweets, usersList);
 
         TrendingTopicAsKeyTweetsListSingleton.INSTANCE.updateTweetsListForTrendingTopicFromServer(topic, tweets);
-        UsersListSigleton.INSTANCE.updateUsersListFromServer(usersList);
+        UsersListSigleton.INSTANCE.updateCachedUsersList(usersList);
     }
 }
