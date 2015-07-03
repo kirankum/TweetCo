@@ -1,5 +1,9 @@
 package com.tweetco.clients;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -15,6 +19,7 @@ import com.tweetco.dao.TweetUser;
 import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.tweets.TweetCommonData;
 
+import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -145,5 +150,53 @@ public class TweetsClient {
 
             }
         },true);
+    }
+
+    public void postTweet(String content, BitmapDrawable imageContent, int replySourceTweetIterator, String replySourceTweetUsername,
+                          boolean bAnonymous, final IStatusCallback callback) throws MalformedURLException {
+        MobileServiceClient client = AccountSingleton.INSTANCE.getMobileServiceClient();
+
+        JsonObject element = new JsonObject();
+        element.addProperty(ApiInfo.kTweetOwner, AccountSingleton.INSTANCE.getUserName());
+        element.addProperty(ApiInfo.kTweetContentKey, content);
+        if(!TextUtils.isEmpty(replySourceTweetUsername))
+        {
+            element.addProperty(ApiInfo.kInReplyToValue, String.valueOf(replySourceTweetIterator));
+            element.addProperty(ApiInfo.kSourceUserKey, replySourceTweetUsername);
+        }
+        if(bAnonymous)
+        {
+            element.addProperty(ApiInfo.kAnonymous, "TRUE");
+        }
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+
+        if(imageContent != null)
+        {
+            Bitmap bitmap = imageContent.getBitmap();
+            bitmap.compress(Bitmap.CompressFormat.JPEG,25,bos);
+            byte[] bb = bos.toByteArray();
+            String image = Base64.encodeToString(bb, 0);
+            element.addProperty("image", image);
+
+        }
+        client.invokeApi(ApiInfo.POST_TWEET, element, new ApiJsonOperationCallback() {
+
+            @Override
+            public void onCompleted(JsonElement element, Exception exception,
+                                    ServiceFilterResponse arg2) {
+                if(exception == null)
+                {
+                    Log.d("postTweet", "TweetPosted");
+                    callback.success(-1);
+                }
+                else
+                {
+                    Log.e("postTweet", "TweetPost failed");
+                    exception.printStackTrace();
+                    callback.failure(-1);
+                }
+
+            }
+        }, true);
     }
 }

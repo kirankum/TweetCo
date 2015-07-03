@@ -7,6 +7,7 @@ import android.util.Base64;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -17,6 +18,8 @@ import com.tweetco.TweetCo;
 import com.tweetco.activities.ApiInfo;
 import com.tweetco.dao.TweetUser;
 import com.tweetco.database.dao.Account;
+
+import org.json.JSONArray;
 
 import java.io.ByteArrayOutputStream;
 import java.net.MalformedURLException;
@@ -77,12 +80,22 @@ public class AccountClient {
 
                         try
                         {
-                            JsonObject jsonObject = arg0.getAsJsonObject().get("profileinfo").getAsJsonArray().get(0).getAsJsonObject();
-                            String contactInfo = GetString(jsonObject, ApiInfo.kContactInfoTags);
-                            String interesttags = GetString(jsonObject, ApiInfo.kInterestTags);
-                            String skilltags = GetString(jsonObject, ApiInfo.kSkillTags);
-                            String personaltags = GetString(jsonObject, ApiInfo.kPersonalTags);
-                            String workinfo = GetString(jsonObject, ApiInfo.kWorkInfo);
+                            JsonArray jsonArray = arg0.getAsJsonObject().get("profileinfo").getAsJsonArray();
+                            String contactInfo = "";
+                            String interesttags = "";
+                            String skilltags = "";
+                            String personaltags = "";
+                            String workinfo = "";
+                            if(!jsonArray.isJsonNull() && jsonArray.size() > 0) {
+                                JsonObject jsonObject = jsonArray.get(0).getAsJsonObject();
+                                contactInfo = GetString(jsonObject, ApiInfo.kContactInfoTags);
+                                interesttags = GetString(jsonObject, ApiInfo.kInterestTags);
+                                skilltags = GetString(jsonObject, ApiInfo.kSkillTags);
+                                personaltags = GetString(jsonObject, ApiInfo.kPersonalTags);
+                                workinfo = GetString(jsonObject, ApiInfo.kWorkInfo);
+                            }
+
+
                             //Also Update the Account Table.
                             tempAccount.contactInfo = contactInfo;
                             tempAccount.workDetails = workinfo;

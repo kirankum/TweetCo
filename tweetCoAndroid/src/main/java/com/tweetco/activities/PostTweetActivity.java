@@ -47,16 +47,20 @@ import com.google.api.services.urlshortener.model.Url;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.onefortybytes.R;
 import com.tweetco.activities.fragments.TrendingFragment.TrendingTag;
+import com.tweetco.activities.helper.Helper;
 import com.tweetco.activities.progress.AsyncTaskEventHandler;
 import com.tweetco.activities.progress.AsyncTaskEventSinks.AsyncTaskCancelCallback;
 import com.tweetco.activities.progress.AsyncTaskEventSinks.UIEventSink;
 import com.tweetco.asynctasks.PostTweetTask;
 import com.tweetco.asynctasks.PostTweetTask.PostTweetTaskCompletionCallback;
 import com.tweetco.asynctasks.PostTweetTaskParams;
+import com.tweetco.clients.TweetsClient;
+import com.tweetco.clients.TwitterAppClient;
 import com.tweetco.dao.TweetUser;
 import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.datastore.TrendingListSingleton;
 import com.tweetco.datastore.UsersListSigleton;
+import com.tweetco.models.tweets.HomeFeedTweetsModel;
 import com.tweetco.tweets.TweetCommonData;
 import com.tweetco.twitter.TwitterApp;
 import com.tweetco.twitter.TwitterApp.TwDialogListener;
@@ -77,25 +81,21 @@ public class PostTweetActivity extends TweetCoBaseActivity
 
 	private MultiAutoCompleteTextView mTweetContent;
 	private TextView mCharCount;
-	private EditText mContentTags;
+	private EditText mContentTags;		//This is for posting as TweetBot, not used in production builds
 	private Button mSendButton;
 	private Button mImageGalleryButton;
 	private Button mImageCameraButton;
 	private ImageView mTweetImage;
 	private CheckBox mAnonymousCheckBox = null;
 	private CheckBox mPostToTwitterCheckBox = null;
-	private String[] mUsernames;
-	
+
 	private int replySourceTweetIterator = -1;
 	private String replySourceTweetUsername = null;
 
 	private int mCharCountInt = TWEET_MAX_CHARS;
-	AsyncTaskEventHandler asyncTaskEventHandler = null;
-	AsyncTaskEventHandler asyncTaskEventHandler2 = null;
-	private TwitterApp mTwitter;
-	
-	private static final String twitter_consumer_key = "JSgcDo14poYM2wvd6ClgYLM1m";
-	private static final String twitter_secret_key = "RGYzdbOxkji3kL6YD42HykB1aqO9MBZwqmP0frNTTx1wPaMXZZ";
+
+	private HomeFeedTweetsModel model;
+	private TwitterAppClient mTwitterAppClient;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -111,6 +111,9 @@ public class PostTweetActivity extends TweetCoBaseActivity
 			actionbar.setDisplayHomeAsUpEnabled(true);
 		}
 
+		model = new HomeFeedTweetsModel();
+		mTwitterAppClient = new TwitterAppClient(mTwLoginDialogListener);
+
 		Intent intent = getIntent();
 		replySourceTweetIterator = intent.getIntExtra(Constants.INTENT_EXTRA_REPLY_SOURCE_TWEET_ITERATOR, -1);
 		replySourceTweetUsername = intent.getStringExtra(Constants.INTENT_EXTRA_REPLY_SOURCE_TWEET_USERNAME);
@@ -124,11 +127,8 @@ public class PostTweetActivity extends TweetCoBaseActivity
 		mTweetImage = UiUtility.getView(this, R.id.tweetImaage);
 		mAnonymousCheckBox = UiUtility.getView(this, R.id.anonymousCheckBox);
 		mPostToTwitterCheckBox = UiUtility.getView(this, R.id.postToTwitterCheckBox);
-		asyncTaskEventHandler = new AsyncTaskEventHandler(this, "Posting...");
-		asyncTaskEventHandler2 = new AsyncTaskEventHandler(this, "Shortening Urls...");
-		mUsernames = getUsernamesAndHashtags(UsersListSigleton.INSTANCE.getUsersList().iterator(), TrendingListSingleton.INSTANCE.getTrendingList().iterator());
 		mTweetContent.setAdapter(new ArrayAdapter<String>(PostTweetActivity.this,
-				android.R.layout.simple_dropdown_item_1line, mUsernames));
+				android.R.layout.simple_dropdown_item_1line, getUsernamesAndHashtags(UsersListSigleton.INSTANCE.getUsersList().iterator(), TrendingListSingleton.INSTANCE.getTrendingList().iterator())));
 		mTweetContent.setThreshold(1);
 		
 		mPostToTwitterCheckBox.setOnClickListener(new OnClickListener() {
@@ -137,15 +137,11 @@ public class PostTweetActivity extends TweetCoBaseActivity
 				onTwitterClick();
 			}
 		});
-		
-		mTwitter 	= new TwitterApp(this, twitter_consumer_key,twitter_secret_key);
-		
-		mTwitter.setListener(mTwLoginDialogListener);
-		
-		if (mTwitter.hasAccessToken()) {
+
+		if (mTwitterAppClient.mApp.hasAccessToken()) {
 			mPostToTwitterCheckBox.setChecked(true);
 			
-			String username = mTwitter.getUsername();
+			String username = mTwitterAppClient.mApp.getUsername();
 			username		= (username.equals("")) ? "Unknown" : username;
 			
 			mPostToTwitterCheckBox.setText("Post to Twitter (" + username + ")");
@@ -249,7 +245,7 @@ public class PostTweetActivity extends TweetCoBaseActivity
 					int end = tweetContent.getSpanEnd(span);
 					if((end - start) > 21)
 					{
-						(new URLShortenerTask(tweetContent, span, asyncTaskEventHandler2)).execute();
+						(new URLShortenerTask(tweetContent, span)).execute();
 					}
 				}
 			}
@@ -263,7 +259,7 @@ public class PostTweetActivity extends TweetCoBaseActivity
 				String tweetContent = mTweetContent.getEditableText().toString();
 				if(!TextUtils.isEmpty(tweetContent))
 				{
-					boolean bAnonymous = mAnonymousCheckBox.isChecked();
+					final boolean bAnonymous = mAnonymousCheckBox.isChecked();
 					boolean bPostTweet = true;
 					if(bAnonymous)
 					{
@@ -277,56 +273,36 @@ public class PostTweetActivity extends TweetCoBaseActivity
 					
 					if(bPostTweet)
 					{
-						try {
-							//TODO Move this code to client
-							MobileServiceClient client = AccountSingleton.INSTANCE.getMobileServiceClient();
-							PostTweetTaskParams params = new PostTweetTaskParams(client, TweetCommonData.getUserName());
-							params.setTweetContent(mTweetContent.getEditableText().toString());
-							params.setTweetImage((BitmapDrawable) mTweetImage.getDrawable());
-							params.setContentTags(mContentTags.getEditableText().toString());
-							params.setReplySourceTweetIterator(replySourceTweetIterator);
-							params.setReplySourceTweetUsername(replySourceTweetUsername);
-							params.setAnonymous(bAnonymous);
-							params.setPostToTwitter(mPostToTwitterCheckBox.isChecked());
-							params.setTwitterApp(mTwitter);
+						new AsyncTask<Void, Void, Boolean>() {
 
-							new PostTweetTask(getApplicationContext(), params, asyncTaskEventHandler, new PostTweetTaskCompletionCallback()
-                            {
+							@Override
+							protected Boolean doInBackground(Void... voids) {
+								Boolean bSuccess = false;
+								try {
+									String content = mTweetContent.getEditableText().toString();
+									model.postTweet(content, (BitmapDrawable) mTweetImage.getDrawable(),
+											replySourceTweetIterator, replySourceTweetUsername, bAnonymous);
 
-                                @Override
-                                public void onPostTweetTaskSuccess()
-                                {
-                                    asyncTaskEventHandler.dismiss();
-                                    Intent resultIntent = new Intent();
-                                    PostTweetActivity.this.setResult(RESULT_OK, resultIntent);
-                                    finish();
-                                }
+									if(mPostToTwitterCheckBox.isChecked()) {
+										mTwitterAppClient.postTweet(content);
+									}
+									bSuccess = true;
+								} catch (MalformedURLException e) {
+									e.printStackTrace();
+								}
+								return  bSuccess;
+							}
 
-                                @Override
-                                public void onPostTweetTaskFailure()
-                                {
-                                    asyncTaskEventHandler.dismiss();
-                                    Log.e(TAG, "Posting tweet failed");
-                                    AlertDialogUtility.getAlertDialogOK(PostTweetActivity.this, "Failed to post your 140 bytes", new  DialogInterface.OnClickListener() {
-
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            // TODO Auto-generated method stub
-
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void onPostTweetTaskCancelled()
-                                {
-                                    asyncTaskEventHandler.dismiss();
-
-                                }
-                            }).execute();
-						} catch (MalformedURLException e) {
-							e.printStackTrace();
-						}
+							@Override
+							protected void onPostExecute(Boolean bSuccess) {
+								if(bSuccess) {
+									PostTweetActivity.this.finish();
+								}
+								else {
+									AlertDialogUtility.getAlertDialogOK(PostTweetActivity.this, "Posting tweet failed", null).show();
+								}
+							}
+						}.execute();
 					}
 				}
 				else
@@ -403,9 +379,9 @@ public class PostTweetActivity extends TweetCoBaseActivity
 	}
 	
 	private void onTwitterClick() {
-		if (!mTwitter.hasAccessToken() && mPostToTwitterCheckBox.isChecked()) 
+		if (!mTwitterAppClient.mApp.hasAccessToken() && mPostToTwitterCheckBox.isChecked())
 		{
-			mTwitter.authorize();
+			mTwitterAppClient.mApp.authorize();
 		}
 	}
 	
@@ -500,10 +476,10 @@ public class PostTweetActivity extends TweetCoBaseActivity
 		private UIEventSink m_uicallback;
 		private Editable mEditable;
 		private URLSpan mUrlSpan = null;
+		AsyncTaskEventHandler eventHandler;
 
-		public URLShortenerTask(Editable editable, URLSpan urlSpan,UIEventSink uicallback)
+		public URLShortenerTask(Editable editable, URLSpan urlSpan)
 		{
-			m_uicallback = uicallback; 
 			mEditable = editable;
 			mUrlSpan = urlSpan;
 		}
@@ -511,6 +487,8 @@ public class PostTweetActivity extends TweetCoBaseActivity
 		@Override
 		protected void onPreExecute()
 		{
+			eventHandler = new AsyncTaskEventHandler(PostTweetActivity.this, "Shortening..");
+			m_uicallback = eventHandler;
 			Log.d("tag","onPreExecute");
 			if(m_uicallback!=null)
 			{
@@ -528,37 +506,24 @@ public class PostTweetActivity extends TweetCoBaseActivity
 		@Override
 		protected String doInBackground(Void... params) 
 		{
-
-			String shortUrl = null;
-			Urlshortener.Builder builder = new Urlshortener.Builder (AndroidHttp.newCompatibleTransport(), AndroidJsonFactory.getDefaultInstance(), null);
-			Urlshortener urlshortener = builder.build();
-
-			com.google.api.services.urlshortener.model.Url url = new Url();
-
 			int start = mEditable.getSpanStart(mUrlSpan);
 			int end = mEditable.getSpanEnd(mUrlSpan);
 			String str = mEditable.toString();
-			String seq = str.substring(start, end);
+			String actualUrl = str.substring(start, end);
 
-			url.setLongUrl(seq);
 			try {
-				url = urlshortener.url().insert(url).execute();
-				shortUrl = url.getId();
+				return Helper.shortenUrl(actualUrl);
 			} catch (IOException e) {
-				return null;
+				return actualUrl;
 			}
-
-
-			return shortUrl;
 		}
 
 		@Override
 		protected void onPostExecute(String  shortUrl)
 		{
-			asyncTaskEventHandler.dismiss();
+			eventHandler.dismiss();
 			if(shortUrl != null)
 			{
-
 				int start = mEditable.getSpanStart(mUrlSpan);
 				int end = mEditable.getSpanEnd(mUrlSpan);
 				mEditable.replace(start, end, shortUrl);
@@ -583,7 +548,7 @@ public class PostTweetActivity extends TweetCoBaseActivity
 	private final TwDialogListener mTwLoginDialogListener = new TwDialogListener() {
 		@Override
 		public void onComplete(String value) {
-			String username = mTwitter.getUsername();
+			String username = mTwitterAppClient.mApp.getUsername();
 			username		= (username.equals("")) ? "No Name" : username;
 		
 			mPostToTwitterCheckBox.setText(" Post to Twitter  (" + username + ")");

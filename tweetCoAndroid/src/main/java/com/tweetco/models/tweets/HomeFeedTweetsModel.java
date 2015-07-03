@@ -1,5 +1,7 @@
 package com.tweetco.models.tweets;
 
+import android.graphics.drawable.BitmapDrawable;
+
 import com.google.gson.JsonObject;
 import com.tweetco.activities.ApiInfo;
 import com.tweetco.clients.TweetsClient;
@@ -46,5 +48,32 @@ public class HomeFeedTweetsModel extends TweetsBaseModel {
 
         HomeFeedTweetsListSingleton.INSTANCE.addHomeFeedsTweetToBottom(tweets);
         UsersListSigleton.INSTANCE.updateCachedUsersList(usersList);
+    }
+
+    public void postTweet(String content, BitmapDrawable imageContent, int replySourceTweetIterator, String replySourceTweetUsername,
+                          boolean bAnonymous) throws MalformedURLException {
+
+        client.postTweet(content, imageContent, replySourceTweetIterator, replySourceTweetUsername, bAnonymous, new TweetsClient.IStatusCallback() {
+            @Override
+            public void success(int iterator) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            refreshLatestTweetsFromServer();
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
+            }
+
+            @Override
+            public void failure(int iterator) {
+
+            }
+        });
+
     }
 }

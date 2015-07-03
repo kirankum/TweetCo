@@ -4,8 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.services.urlshortener.Urlshortener;
+import com.google.api.services.urlshortener.model.Url;
 import com.tweetco.activities.Constants;
 import com.tweetco.activities.PostTweetActivity;
+
+import java.io.IOException;
 
 /**
  * Created by kirankumar on 29/06/15.
@@ -24,4 +30,18 @@ public class Helper {
         activity.startActivityForResult(intent, Constants.POSTED_TWEET_REQUEST_CODE);
     }
 
+    public static String shortenUrl(String actualUrl) throws IOException {
+        String shortUrl = null;
+        Urlshortener.Builder builder = new Urlshortener.Builder (AndroidHttp.newCompatibleTransport(), AndroidJsonFactory.getDefaultInstance(), null);
+        Urlshortener urlshortener = builder.build();
+
+        com.google.api.services.urlshortener.model.Url url = new Url();
+
+        url.setLongUrl(actualUrl);
+
+        url = urlshortener.url().insert(url).execute();
+        shortUrl = url.getId();
+
+        return shortUrl;
+    }
 }
