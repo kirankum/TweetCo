@@ -124,7 +124,7 @@ public class UserTweetsListFragment extends TweetListFragmentBase implements OnC
             @Override
             public void run() {
                 if (mAdapter == null) {
-                    initAdapter(UserAsKeyTweetsListSingleton.INSTANCE.getTweetsListForUser(mUsername));
+                    initAdapter(UserTweetsListFragment.this.getActivity(), UserAsKeyTweetsListSingleton.INSTANCE.getTweetsListForUser(mUsername));
                 }
 
                 mAdapter.notifyDataSetChanged();

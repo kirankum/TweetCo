@@ -182,7 +182,7 @@ public class HomeFeedTweetsListFragment extends TweetListFragmentBase implements
             @Override
             public void run() {
                 if (mAdapter == null) {
-                    initAdapter(HomeFeedTweetsListSingleton.INSTANCE.getHomeFeedTweets());
+                    initAdapter(HomeFeedTweetsListFragment.this.getActivity(), HomeFeedTweetsListSingleton.INSTANCE.getHomeFeedTweets());
                 }
 
                 mAdapter.notifyDataSetChanged();

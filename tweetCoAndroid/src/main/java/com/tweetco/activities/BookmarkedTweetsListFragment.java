@@ -128,7 +128,7 @@ public class BookmarkedTweetsListFragment extends TweetListFragmentBase implemen
             @Override
             public void run() {
                 if (mAdapter == null) {
-                    initAdapter(BookmarkedTweetsListSingleton.INSTANCE.getBookmarkedTweets());
+                    initAdapter(BookmarkedTweetsListFragment.this.getActivity(), BookmarkedTweetsListSingleton.INSTANCE.getBookmarkedTweets());
                 }
 
                 mAdapter.notifyDataSetChanged();

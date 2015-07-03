@@ -68,7 +68,7 @@ public class TrendingTopicTweetsListFragment extends TweetListFragmentBase imple
     @Override
     public void onPause() {
         super.onPause();
-        UserAsKeyTweetsListSingleton.INSTANCE.removeListener(mTopic, this);
+        TrendingTopicAsKeyTweetsListSingleton.INSTANCE.removeListener(mTopic, this);
     }
 
     @Override
@@ -123,7 +123,7 @@ public class TrendingTopicTweetsListFragment extends TweetListFragmentBase imple
             @Override
             public void run() {
                 if (mAdapter == null) {
-                    initAdapter(TrendingTopicAsKeyTweetsListSingleton.INSTANCE.getTweetsListForTopic(mTopic));
+                    initAdapter(TrendingTopicTweetsListFragment.this.getActivity(), TrendingTopicAsKeyTweetsListSingleton.INSTANCE.getTweetsListForTopic(mTopic));
                 }
 
                 mAdapter.notifyDataSetChanged();

@@ -1,6 +1,7 @@
 package com.tweetco.activities;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -183,9 +184,9 @@ public class TweetListFragmentBase extends Fragment {
         mTweetContentImageFetcher.closeCache();
     }
 
-    protected void initAdapter(List<Integer> list) {
+    protected void initAdapter(Activity activity, List<Integer> list) {
         tweetIteratorList = list;
-        mAdapter = new TweetAdapter(TweetCo.mContext, R.layout.tweet, list, mProfileImageFetcher, mTweetContentImageFetcher, new TweetAdapter.OnProfilePicClick() {
+        mAdapter = new TweetAdapter(activity, R.layout.tweet, list, mProfileImageFetcher, mTweetContentImageFetcher, new TweetAdapter.OnProfilePicClick() {
 
             @Override
             public void onItemClick(int position) {
