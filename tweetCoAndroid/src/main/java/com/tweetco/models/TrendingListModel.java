@@ -1,6 +1,6 @@
 package com.tweetco.models;
 
-import com.tweetco.activities.TrendingFragment;
+import com.tweetco.activities.fragments.TrendingFragment;
 import com.tweetco.clients.TrendingListClient;
 import com.tweetco.database.dao.Account;
 import com.tweetco.datastore.AccountSingleton;

@@ -1,15 +1,12 @@
-package com.tweetco.activities;
+package com.tweetco.activities.fragments;
 
 import android.os.Bundle;
 import android.view.View;
 
 import com.imagedisplay.util.AsyncTask;
-import com.tweetco.datastore.TrendingListSingleton;
 import com.tweetco.datastore.TrendingTopicAsKeyTweetsListSingleton;
-import com.tweetco.datastore.UserAsKeyTweetsListSingleton;
 import com.tweetco.interfaces.OnChangeListener;
 import com.tweetco.models.tweets.TrendingTweetsModel;
-import com.tweetco.models.tweets.UserTweetsModel;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -119,15 +116,17 @@ public class TrendingTopicTweetsListFragment extends TweetListFragmentBase imple
     }
 
     private void refreshUiOnUIThread() {
-        this.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mAdapter == null) {
-                    initAdapter(TrendingTopicTweetsListFragment.this.getActivity(), TrendingTopicAsKeyTweetsListSingleton.INSTANCE.getTweetsListForTopic(mTopic));
-                }
+        if(isAdded()) {
+            this.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mAdapter == null) {
+                        initAdapter(TrendingTopicTweetsListFragment.this.getActivity(), TrendingTopicAsKeyTweetsListSingleton.INSTANCE.getTweetsListForTopic(mTopic));
+                    }
 
-                mAdapter.notifyDataSetChanged();
-            }
-        });
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 }

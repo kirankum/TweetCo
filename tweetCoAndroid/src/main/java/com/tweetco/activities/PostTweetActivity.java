@@ -10,7 +10,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -47,7 +46,7 @@ import com.google.api.services.urlshortener.Urlshortener;
 import com.google.api.services.urlshortener.model.Url;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.onefortybytes.R;
-import com.tweetco.activities.TrendingFragment.TrendingTag;
+import com.tweetco.activities.fragments.TrendingFragment.TrendingTag;
 import com.tweetco.activities.progress.AsyncTaskEventHandler;
 import com.tweetco.activities.progress.AsyncTaskEventSinks.AsyncTaskCancelCallback;
 import com.tweetco.activities.progress.AsyncTaskEventSinks.UIEventSink;

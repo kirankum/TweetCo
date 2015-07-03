@@ -1,21 +1,10 @@
 package com.tweetco.tweets;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.apache.commons.collections4.map.LinkedMap;
-
 import android.text.TextUtils;
 
-import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.tweetco.datastore.AccountSingleton;
-import com.tweetco.activities.TrendingFragment;
 import com.tweetco.activities.TweetUtils;
 import com.tweetco.dao.Tweet;
-import com.tweetco.dao.TweetUser;
 import com.tweetco.database.dao.Account;
 
 public class TweetCommonData 

@@ -1,7 +1,6 @@
-package com.tweetco.activities;
+package com.tweetco.activities.fragments;
 
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -18,7 +17,9 @@ import android.widget.TextView;
 
 import com.imagedisplay.util.AsyncTask;
 import com.onefortybytes.R;
-import com.tweetco.dao.TweetUser;
+import com.tweetco.activities.Constants;
+import com.tweetco.activities.ListFragmentWithSwipeRefreshLayout;
+import com.tweetco.activities.TrendingFragmentActivity;
 import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.datastore.TrendingListSingleton;
 import com.tweetco.interfaces.OnChangeListener;
@@ -31,8 +32,8 @@ public class TrendingFragment extends ListFragmentWithSwipeRefreshLayout impleme
 
 	public static class TrendingTag
 	{
-		String hashtag;
-		String eventcount;
+		public String hashtag;
+		public String eventcount;
 	}
 		
 	private String mUserName = null;
@@ -131,18 +132,20 @@ public class TrendingFragment extends ListFragmentWithSwipeRefreshLayout impleme
 
 	@Override
 	public void onChange(TrendingListModel model) {
-		this.getActivity().runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				if (mAdapter == null) {
-					mAdapter = new TrendingAdapter(TrendingFragment.this.getActivity(), android.R.layout.simple_list_item_1, TrendingListSingleton.INSTANCE.getTrendingList());
+		if(isAdded()) {
+			this.getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					if (mAdapter == null) {
+						mAdapter = new TrendingAdapter(TrendingFragment.this.getActivity(), android.R.layout.simple_list_item_1, TrendingListSingleton.INSTANCE.getTrendingList());
 
-					TrendingFragment.this.setListAdapter(mAdapter);
+						TrendingFragment.this.setListAdapter(mAdapter);
+					}
+
+					mAdapter.notifyDataSetChanged();
 				}
-
-				mAdapter.notifyDataSetChanged();
-			}
-		});
+			});
+		}
 	}
  
 	

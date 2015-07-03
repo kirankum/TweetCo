@@ -1,15 +1,11 @@
-package com.tweetco.activities;
+package com.tweetco.activities.fragments;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 import com.imagedisplay.util.AsyncTask;
-import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.datastore.UserAsKeyTweetsListSingleton;
 import com.tweetco.interfaces.OnChangeListener;
-import com.tweetco.models.tweets.BookmarkedTweetsModel;
 import com.tweetco.models.tweets.UserTweetsModel;
 
 import java.net.MalformedURLException;
@@ -120,15 +116,17 @@ public class UserTweetsListFragment extends TweetListFragmentBase implements OnC
     }
 
     private void refreshUiOnUIThread() {
-        this.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mAdapter == null) {
-                    initAdapter(UserTweetsListFragment.this.getActivity(), UserAsKeyTweetsListSingleton.INSTANCE.getTweetsListForUser(mUsername));
-                }
+        if(isAdded()) {
+            this.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mAdapter == null) {
+                        initAdapter(UserTweetsListFragment.this.getActivity(), UserAsKeyTweetsListSingleton.INSTANCE.getTweetsListForUser(mUsername));
+                    }
 
-                mAdapter.notifyDataSetChanged();
-            }
-        });
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 }

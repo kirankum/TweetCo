@@ -1,6 +1,5 @@
 package com.tweetco.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -8,7 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
 import com.onefortybytes.R;
-import com.tweetco.dao.Tweet;
+import com.tweetco.activities.fragments.TrendingTopicTweetsListFragment;
 import com.tweetco.utility.UiUtility;
 
 public class TrendingFragmentActivity extends TweetCoBaseActivity 

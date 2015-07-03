@@ -1,4 +1,4 @@
-package com.tweetco.activities;
+package com.tweetco.activities.fragments;
 
 import java.net.MalformedURLException;
 import java.util.ArrayList;
@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,22 +19,20 @@ import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.imagedisplay.util.AsyncTask;
 import com.imagedisplay.util.ImageFetcher;
 import com.imagedisplay.util.Utils;
-import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
-import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.onefortybytes.R;
 import com.tweetco.Exceptions.TweetUserNotFoundException;
+import com.tweetco.activities.Constants;
+import com.tweetco.activities.ListFragmentWithSwipeRefreshLayout;
+import com.tweetco.activities.TweetUtils;
+import com.tweetco.activities.UserProfileActivity;
 import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.dao.TweetUser;
 import com.tweetco.datastore.UsersListSigleton;
 import com.tweetco.interfaces.OnChangeListener;
 import com.tweetco.models.UsersListModel;
-import com.tweetco.tweets.TweetCommonData;
 
 public class UsersListFragment extends ListFragmentWithSwipeRefreshLayout implements OnChangeListener<UsersListModel>
 {
@@ -198,20 +195,20 @@ public class UsersListFragment extends ListFragmentWithSwipeRefreshLayout implem
 
 	@Override
 	public void onChange(UsersListModel model) {
-		this.getActivity().runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				if (userListAdapter == null) {
-					userListAdapter = new UserListAdapter(UsersListFragment.this.getActivity(), R.layout.users_list_row, new ArrayList<TweetUser>());
+		if(isAdded()) {
+			this.getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					if (userListAdapter == null) {
+						userListAdapter = new UserListAdapter(UsersListFragment.this.getActivity(), R.layout.users_list_row, new ArrayList<TweetUser>());
 
-					UsersListFragment.this.setListAdapter(userListAdapter);
+						UsersListFragment.this.setListAdapter(userListAdapter);
+					}
+
+					userListAdapter.getFilter().filter(null);
 				}
-
-				userListAdapter.getFilter().filter(null);
-			}
-		});
-
-
+			});
+		}
 	}
 
 

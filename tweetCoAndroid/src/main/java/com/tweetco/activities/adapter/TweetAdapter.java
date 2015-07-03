@@ -1,4 +1,4 @@
-package com.tweetco.activities;
+package com.tweetco.activities.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +24,11 @@ import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.onefortybytes.R;
 import com.tweetco.TweetCo;
+import com.tweetco.activities.Constants;
+import com.tweetco.activities.ImageViewActivity;
+import com.tweetco.activities.InfiniteScrollListPageListener;
+import com.tweetco.activities.Linkify;
+import com.tweetco.activities.TweetUtils;
 import com.tweetco.dao.Tweet;
 import com.tweetco.dao.TweetUser;
 import com.tweetco.datastore.TweetsListSingleton;
@@ -84,7 +89,7 @@ public class TweetAdapter extends ArrayAdapter<Integer>
 	private OnBookmarkClick mOnBookmarkClick;
 	private OnHideClick mOnHideClick;
 
-	protected InfiniteScrollListPageListener mInfiniteListPageListener; 
+	protected InfiniteScrollListPageListener mInfiniteListPageListener;
 
 	// A lock to prevent another scrolling event to be triggered if one is already in session
 	private boolean canScroll = true;

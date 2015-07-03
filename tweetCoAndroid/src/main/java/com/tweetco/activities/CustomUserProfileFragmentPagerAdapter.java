@@ -10,8 +10,9 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
+import com.tweetco.activities.fragments.BookmarkedTweetsListFragment;
+import com.tweetco.activities.fragments.UserTweetsListFragment;
 import com.tweetco.datastore.AccountSingleton;
-import com.tweetco.tweets.TweetCommonData;
 
 public class CustomUserProfileFragmentPagerAdapter extends FragmentStatePagerAdapter
 {

@@ -10,9 +10,8 @@ import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
 import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
 import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.tweetco.activities.ApiInfo;
-import com.tweetco.activities.TrendingFragment;
+import com.tweetco.activities.fragments.TrendingFragment;
 import com.tweetco.datastore.AccountSingleton;
-import com.tweetco.tweets.TweetCommonData;
 
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;

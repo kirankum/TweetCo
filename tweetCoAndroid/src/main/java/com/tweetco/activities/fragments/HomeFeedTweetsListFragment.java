@@ -1,33 +1,21 @@
-package com.tweetco.activities;
+package com.tweetco.activities.fragments;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.widget.AbsListView;
 import android.widget.ListView;
 
 import com.example.floatingactionbuttonexample.FloatingActionButton;
 import com.imagedisplay.util.AsyncTask;
-import com.imagedisplay.util.Utils;
 import com.onefortybytes.R;
-import com.tweetco.TweetCo;
+import com.tweetco.activities.Constants;
 import com.tweetco.activities.helper.Helper;
-import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.datastore.HomeFeedTweetsListSingleton;
-import com.tweetco.datastore.TrendingListSingleton;
 import com.tweetco.interfaces.OnChangeListener;
-import com.tweetco.models.TrendingListModel;
 import com.tweetco.models.tweets.HomeFeedTweetsModel;
-import com.tweetco.utility.UiUtility;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -178,16 +166,18 @@ public class HomeFeedTweetsListFragment extends TweetListFragmentBase implements
     }
 
     private void refreshUiOnUIThread() {
-        this.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mAdapter == null) {
-                    initAdapter(HomeFeedTweetsListFragment.this.getActivity(), HomeFeedTweetsListSingleton.INSTANCE.getHomeFeedTweets());
-                }
+        if(isAdded()) {
+            this.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mAdapter == null) {
+                        initAdapter(HomeFeedTweetsListFragment.this.getActivity(), HomeFeedTweetsListSingleton.INSTANCE.getHomeFeedTweets());
+                    }
 
-                mAdapter.notifyDataSetChanged();
-            }
-        });
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
     @Override

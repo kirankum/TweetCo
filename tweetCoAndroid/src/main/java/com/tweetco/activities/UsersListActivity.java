@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.onefortybytes.R;
+import com.tweetco.activities.fragments.UsersListFragment;
 import com.tweetco.utility.UiUtility;
 
 public class UsersListActivity extends TweetCoBaseActivity 

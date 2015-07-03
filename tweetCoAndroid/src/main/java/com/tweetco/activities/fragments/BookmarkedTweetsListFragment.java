@@ -1,21 +1,12 @@
-package com.tweetco.activities;
+package com.tweetco.activities.fragments;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
 
-import com.example.floatingactionbuttonexample.FloatingActionButton;
 import com.imagedisplay.util.AsyncTask;
-import com.onefortybytes.R;
 import com.tweetco.datastore.BookmarkedTweetsListSingleton;
-import com.tweetco.datastore.HomeFeedTweetsListSingleton;
 import com.tweetco.interfaces.OnChangeListener;
 import com.tweetco.models.tweets.BookmarkedTweetsModel;
-import com.tweetco.models.tweets.HomeFeedTweetsModel;
 
 import java.net.MalformedURLException;
 import java.util.List;
@@ -124,16 +115,18 @@ public class BookmarkedTweetsListFragment extends TweetListFragmentBase implemen
     }
 
     private void refreshUiOnUIThread() {
-        this.getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (mAdapter == null) {
-                    initAdapter(BookmarkedTweetsListFragment.this.getActivity(), BookmarkedTweetsListSingleton.INSTANCE.getBookmarkedTweets());
-                }
+        if(isAdded()) {
+            this.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (mAdapter == null) {
+                        initAdapter(BookmarkedTweetsListFragment.this.getActivity(), BookmarkedTweetsListSingleton.INSTANCE.getBookmarkedTweets());
+                    }
 
-                mAdapter.notifyDataSetChanged();
-            }
-        });
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
+        }
     }
 
 

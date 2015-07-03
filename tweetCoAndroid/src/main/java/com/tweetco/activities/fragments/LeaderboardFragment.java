@@ -1,4 +1,4 @@
-package com.tweetco.activities;
+package com.tweetco.activities.fragments;
 
 import java.net.MalformedURLException;
 
@@ -11,6 +11,9 @@ import com.imagedisplay.util.AsyncTask;
 import com.imagedisplay.util.ImageFetcher;
 import com.imagedisplay.util.Utils;
 import com.onefortybytes.R;
+import com.tweetco.activities.Constants;
+import com.tweetco.activities.ListFragmentWithSwipeRefreshLayout;
+import com.tweetco.activities.UserProfileActivity;
 import com.tweetco.activities.adapter.LeaderboardAdapter;
 import com.tweetco.activities.adapter.LeaderboardAdapter.OnProfilePicClick;
 import com.tweetco.dao.LeaderboardUser;
@@ -122,17 +125,19 @@ public class LeaderboardFragment extends ListFragmentWithSwipeRefreshLayout impl
 	}
 
 	private void refreshUiOnUIThread() {
-		this.getActivity().runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				if (mAdapter == null) {
-					mAdapter = new LeaderboardAdapter(LeaderboardFragment.this.getActivity(), R.layout.leaderview, LeaderboardListSingleton.INSTANCE.getLeaderboardUserList(), imageFetcher, onProfileClick);
+		if(isAdded()) {
+			this.getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					if (mAdapter == null) {
+						mAdapter = new LeaderboardAdapter(LeaderboardFragment.this.getActivity(), R.layout.leaderview, LeaderboardListSingleton.INSTANCE.getLeaderboardUserList(), imageFetcher, onProfileClick);
 
-					LeaderboardFragment.this.setListAdapter(mAdapter);
+						LeaderboardFragment.this.setListAdapter(mAdapter);
+					}
+
+					mAdapter.notifyDataSetChanged();
 				}
-
-				mAdapter.notifyDataSetChanged();
-			}
-		});
+			});
+		}
 	}
 }
