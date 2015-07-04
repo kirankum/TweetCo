@@ -1,11 +1,18 @@
 package com.tweetco.activities;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,15 +29,17 @@ import com.imagedisplay.util.ImageFetcher;
 import com.imagedisplay.util.Utils;
 import com.microsoft.windowsazure.notifications.NotificationsManager;
 import com.onefortybytes.R;
+import com.tweetco.asynctasks.BitmapWorkerTask;
 import com.tweetco.dao.Tweet;
 import com.tweetco.database.dao.Account;
 import com.tweetco.datastore.AccountSingleton;
 import com.tweetco.notifications.PushNotificationHandler;
+import com.tweetco.roundedimageview.RoundedImageView;
 import com.tweetco.tweets.TweetCommonData;
+import com.tweetco.utility.UiUtility;
 
 
-
-public class AllInOneActivity extends TweetCoBaseActivity 
+public class AllInOneActivity extends TweetCoBaseActivity
 {
 
 	@Override
@@ -44,13 +53,18 @@ public class AllInOneActivity extends TweetCoBaseActivity
 	public static final String SENDER_ID = "721884328218";
 
 	private ActionBar m_actionbar;
+	private DrawerLayout mDrawer;
+	private NavigationView mNavigationView;
+	private ActionBarDrawerToggle mDrawerToggle;
+	private Toolbar toolbar;
+	private View mProfileBackgroundImage;
+	private RoundedImageView mProfilePicImageView;
+	private TextView mProfileNameTextView;
 
 	private static final String TAG = "AllInOneActivity";
 
 	private ViewPager mViewPager;
 	private static CustomFragmentPagerAdapter mPagerAdapter = null;
-	private ImageView mProfileImageView;
-	private TextView mProfileUsernameTextView;
 	private Account mAccount;
 	private ImageFetcher mImageFetcher;
 
@@ -63,12 +77,48 @@ public class AllInOneActivity extends TweetCoBaseActivity
 
 		NotificationsManager.handleNotifications(this, SENDER_ID, PushNotificationHandler.class);
 
-		mImageFetcher = Utils.getImageFetcher(this, 50, 50);
+		mImageFetcher = Utils.getImageFetcher(this, 60, 60);
+
+		// Set a Toolbar to replace the ActionBar.
+		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+
+		// Find our drawer view
+		mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		mDrawerToggle = setupDrawerToggle();
+
+		// Tie DrawerLayout events to the ActionBarToggle
+		mDrawer.setDrawerListener(mDrawerToggle);
+
+		// Find our drawer view
+		mNavigationView = (NavigationView) findViewById(R.id.nvView);
+		// Setup drawer view
+		setupDrawerContent(mNavigationView);
 
 		customizeActionBar();
 
-		mProfileImageView = (ImageView)m_actionbar.getCustomView().findViewById(R.id.imageView1);
-		mProfileImageView.setOnClickListener(new View.OnClickListener() {
+	}
+
+
+	public void customizeActionBar()
+	{
+		m_actionbar = getSupportActionBar();
+		m_actionbar.setDisplayShowHomeEnabled(true);
+		m_actionbar.setDisplayShowTitleEnabled(false);
+		m_actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
+	}
+
+	private ActionBarDrawerToggle setupDrawerToggle() {
+		return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open,  R.string.drawer_close);
+	}
+
+	private void setupDrawerContent(NavigationView navigationView) {
+
+		mProfileBackgroundImage = UiUtility.getView(navigationView, R.id.navProfileBackground);
+		mProfilePicImageView = UiUtility.getView(navigationView, R.id.navProfilePic);
+		mProfileNameTextView = UiUtility.getView(navigationView, R.id.navProfileName);
+
+		mProfilePicImageView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(AllInOneActivity.this, UserProfileActivity.class);
@@ -77,20 +127,50 @@ public class AllInOneActivity extends TweetCoBaseActivity
 			}
 		});
 
-		mProfileUsernameTextView = (TextView)m_actionbar.getCustomView().findViewById(R.id.title);
+		navigationView.setNavigationItemSelectedListener(
+				new NavigationView.OnNavigationItemSelectedListener() {
+					@Override
+					public boolean onNavigationItemSelected(MenuItem menuItem) {
+						selectDrawerItem(menuItem);
+						return true;
+					}
+				});
 	}
 
+	public void selectDrawerItem(MenuItem menuItem) {
+		// Create a new fragment and specify the planet to show based on
+		// position
+		Fragment fragment = null;
 
-	public void customizeActionBar()
-	{
-		m_actionbar = getSupportActionBar();
-		m_actionbar.setDisplayShowHomeEnabled(false);
-		m_actionbar.setDisplayShowTitleEnabled(false);
-		View customView =  LayoutInflater.from(this).inflate(R.layout.custom_action_bar, null);
-		ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT, Gravity.CENTER);
-		m_actionbar.setCustomView(customView, params);
-		m_actionbar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ~ActionBar.DISPLAY_SHOW_HOME);
-		m_actionbar.setDisplayHomeAsUpEnabled(false);	
+		Class fragmentClass;
+		switch(menuItem.getItemId()) {
+			case R.id.nav_first_fragment:
+				//fragmentClass = FirstFragment.class;
+				break;
+			case R.id.nav_second_fragment:
+				//fragmentClass = SecondFragment.class;
+				break;
+			case R.id.nav_third_fragment:
+				//fragmentClass = ThirdFragment.class;
+				break;
+			default:
+				//fragmentClass = FirstFragment.class;
+		}
+
+		/*try {
+			fragment = (Fragment) fragmentClass.newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// Insert the fragment by replacing any existing fragment
+		FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+		fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();*/
+
+		// Highlight the selected item, update the title, and close the drawer
+		menuItem.setChecked(true);
+		setTitle(menuItem.getTitle());
+		mDrawer.closeDrawers();
 	}
 
 	private void hideKeyboard() 
@@ -167,6 +247,20 @@ public class AllInOneActivity extends TweetCoBaseActivity
 		super.onPause();
 	}
 
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		mDrawerToggle.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		// Pass any configuration change to the drawer toggles
+		mDrawerToggle.onConfigurationChanged(newConfig);
+	}
+
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -188,8 +282,12 @@ public class AllInOneActivity extends TweetCoBaseActivity
 	{
 		initializePager();
 
-		mProfileUsernameTextView.setText(mAccount.getUsername());
-		mImageFetcher.loadImage(mAccount.profileimageurl, mProfileImageView);
+		mProfileNameTextView.setText(mAccount.getUsername());
+		mImageFetcher.loadImage(mAccount.profileimageurl, mProfilePicImageView);
+		if(!TextUtils.isEmpty(mAccount.profilebgurl)) {
+			BitmapWorkerTask bitmapWorkerTask = new BitmapWorkerTask(mAccount.profilebgurl, mProfileBackgroundImage, this);
+			bitmapWorkerTask.execute();
+		}
 	}
 	
 	@Override
@@ -202,6 +300,10 @@ public class AllInOneActivity extends TweetCoBaseActivity
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		if (mDrawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.action_about:
@@ -211,6 +313,9 @@ public class AllInOneActivity extends TweetCoBaseActivity
 	        case R.id.action_feedback:
 	        	launchPostTweetActivity("#feedback", -1, null);
 	            return true;
+			case android.R.id.home:
+				mDrawer.openDrawer(GravityCompat.START);
+				return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }

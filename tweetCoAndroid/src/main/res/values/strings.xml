@@ -10,5 +10,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="choose_picture_dialog_title">Choose picture</string>
-    
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
 </resources>
