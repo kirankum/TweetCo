@@ -2,16 +2,36 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_first_fragment"
+            android:id="@+id/nav_home"
             android:icon="@drawable/ic_one"
-            android:title="First" />
+            android:title="Home" />
         <item
-            android:id="@+id/nav_second_fragment"
+            android:id="@+id/nav_today"
             android:icon="@drawable/ic_two"
-            android:title="Second" />
+            android:title="Citrix Today" />
         <item
-            android:id="@+id/nav_third_fragment"
+            android:id="@+id/nav_notifications"
             android:icon="@drawable/ic_three"
-            android:title="Third" />
+            android:title="Notifications" />
+        <item
+            android:id="@+id/nav_mentions"
+            android:icon="@drawable/ic_three"
+            android:title="Mentions" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/ic_three"
+            android:title="Profile" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_three"
+            android:title="Settings" />
+        <item
+            android:id="@+id/nav_feedback"
+            android:icon="@drawable/ic_three"
+            android:title="Feedback" />
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_three"
+            android:title="About" />
     </group>
 </menu>

@@ -144,15 +144,10 @@ public class AllInOneActivity extends TweetCoBaseActivity
 
 		Class fragmentClass;
 		switch(menuItem.getItemId()) {
-			case R.id.nav_first_fragment:
+			case R.id.nav_home:
 				//fragmentClass = FirstFragment.class;
 				break;
-			case R.id.nav_second_fragment:
-				//fragmentClass = SecondFragment.class;
-				break;
-			case R.id.nav_third_fragment:
-				//fragmentClass = ThirdFragment.class;
-				break;
+
 			default:
 				//fragmentClass = FirstFragment.class;
 		}
