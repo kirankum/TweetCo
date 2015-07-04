@@ -180,33 +180,4 @@ public class HomeFeedTweetsListFragment extends TweetListFragmentBase implements
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if(requestCode == Constants.POSTED_TWEET_REQUEST_CODE)
-        {
-            if(resultCode == Activity.RESULT_OK)
-            {
-                new AsyncTask<Void, Void, Void>() {
-                    @Override
-                    protected Void doInBackground(Void... params) {
-                        try {
-                            model.refreshLatestTweetsFromServer();
-                        } catch (MalformedURLException e) {
-
-                        }
-
-                        return null;
-                    }
-
-                    @Override
-                    protected void onPostExecute(Void aVoid) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-
-                }.execute();
-            }
-        }
-    }
-
 }

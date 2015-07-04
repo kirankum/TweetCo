@@ -27,7 +27,7 @@ public class Helper {
             intent.putExtra(Constants.INTENT_EXTRA_REPLY_SOURCE_TWEET_USERNAME, replySourceTweetUsername);
             intent.putExtra(Constants.INTENT_EXTRA_REPLY_SOURCE_TWEET_ITERATOR, replySourceTweetIterator);
         }
-        activity.startActivityForResult(intent, Constants.POSTED_TWEET_REQUEST_CODE);
+        activity.startActivity(intent);
     }
 
     public static String shortenUrl(String actualUrl) throws IOException {

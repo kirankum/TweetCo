@@ -121,9 +121,7 @@ public class AllInOneActivity extends TweetCoBaseActivity
 		mProfilePicImageView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(AllInOneActivity.this, UserProfileActivity.class);
-				intent.putExtra(Constants.USERNAME_STR, TweetCommonData.getUserName());
-				AllInOneActivity.this.startActivityForResult(intent, Constants.POSTED_TWEET_REQUEST_CODE);
+				AllInOneActivity.this.launchUserProfileActivity();
 			}
 		});
 
@@ -137,6 +135,12 @@ public class AllInOneActivity extends TweetCoBaseActivity
 				});
 	}
 
+	public void launchUserProfileActivity() {
+		Intent intent = new Intent(AllInOneActivity.this, UserProfileActivity.class);
+		intent.putExtra(Constants.USERNAME_STR, TweetCommonData.getUserName());
+		AllInOneActivity.this.startActivity(intent);
+	}
+
 	public void selectDrawerItem(MenuItem menuItem) {
 		// Create a new fragment and specify the planet to show based on
 		// position
@@ -146,6 +150,10 @@ public class AllInOneActivity extends TweetCoBaseActivity
 		switch(menuItem.getItemId()) {
 			case R.id.nav_home:
 				//fragmentClass = FirstFragment.class;
+				break;
+
+			case R.id.nav_profile:
+				this.launchUserProfileActivity();
 				break;
 
 			case R.id.nav_feedback:
@@ -260,23 +268,6 @@ public class AllInOneActivity extends TweetCoBaseActivity
 		mDrawerToggle.onConfigurationChanged(newConfig);
 	}
 
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data)
-	{
-		if(requestCode == Constants.POSTED_TWEET_REQUEST_CODE)
-		{
-			if(resultCode == RESULT_OK)
-			{
-
-			}
-		}
-		else
-		{
-			super.onActivityResult(requestCode, resultCode, data);
-		}
-	}
-
 	public void initActivity()
 	{
 		initializePager();
@@ -320,7 +311,7 @@ public class AllInOneActivity extends TweetCoBaseActivity
 			intent.putExtra(Constants.INTENT_EXTRA_REPLY_SOURCE_TWEET_USERNAME, replySourceTweetUsername);
 			intent.putExtra(Constants.INTENT_EXTRA_REPLY_SOURCE_TWEET_ITERATOR, replySourceTweetIterator);
 		}
-		this.startActivityForResult(intent, Constants.POSTED_TWEET_REQUEST_CODE);
+		this.startActivity(intent);
 	}
 
 }
