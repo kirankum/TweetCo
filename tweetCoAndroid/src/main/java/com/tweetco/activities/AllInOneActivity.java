@@ -148,6 +148,10 @@ public class AllInOneActivity extends TweetCoBaseActivity
 				//fragmentClass = FirstFragment.class;
 				break;
 
+			case R.id.nav_feedback:
+				launchPostTweetActivity("#feedback", -1, null);
+				break;
+
 			default:
 				//fragmentClass = FirstFragment.class;
 		}
@@ -284,15 +288,13 @@ public class AllInOneActivity extends TweetCoBaseActivity
 			bitmapWorkerTask.execute();
 		}
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 	    // Inflate the menu items for use in the action bar
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.launcher, menu);
 	    return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
@@ -301,14 +303,7 @@ public class AllInOneActivity extends TweetCoBaseActivity
 
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
-	        case R.id.action_about:
-	        	Intent intent = new Intent(this.getApplicationContext(),AboutActivity.class);
-	    		this.startActivity(intent);
-	            return true;
-	        case R.id.action_feedback:
-	        	launchPostTweetActivity("#feedback", -1, null);
-	            return true;
-			case android.R.id.home:
+	        case android.R.id.home:
 				mDrawer.openDrawer(GravityCompat.START);
 				return true;
 	        default:
