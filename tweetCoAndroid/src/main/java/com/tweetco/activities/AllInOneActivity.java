@@ -142,14 +142,13 @@ public class AllInOneActivity extends TweetCoBaseActivity
 	}
 
 	public void selectDrawerItem(MenuItem menuItem) {
-		// Create a new fragment and specify the planet to show based on
-		// position
-		Fragment fragment = null;
 
-		Class fragmentClass;
+		menuItem.setChecked(true);
+		setTitle(menuItem.getTitle());
+		mDrawer.closeDrawers();
+
 		switch(menuItem.getItemId()) {
 			case R.id.nav_home:
-				//fragmentClass = FirstFragment.class;
 				break;
 
 			case R.id.nav_profile:
@@ -161,23 +160,8 @@ public class AllInOneActivity extends TweetCoBaseActivity
 				break;
 
 			default:
-				//fragmentClass = FirstFragment.class;
+				break;
 		}
-
-		/*try {
-			fragment = (Fragment) fragmentClass.newInstance();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		// Insert the fragment by replacing any existing fragment
-		FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-		fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();*/
-
-		// Highlight the selected item, update the title, and close the drawer
-		menuItem.setChecked(true);
-		setTitle(menuItem.getTitle());
-		mDrawer.closeDrawers();
 	}
 
 	private void hideKeyboard() 
