@@ -155,6 +155,11 @@ public class AllInOneActivity extends TweetCoBaseActivity
 				this.launchUserProfileActivity();
 				break;
 
+			case R.id.nav_today:
+				Intent intent = new Intent(this, TodayTweetsActivity.class);
+				this.startActivity(intent);
+				break;
+
 			case R.id.nav_feedback:
 				launchPostTweetActivity("#feedback", -1, null);
 				break;

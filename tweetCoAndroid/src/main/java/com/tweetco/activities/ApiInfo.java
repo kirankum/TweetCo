@@ -58,6 +58,7 @@ public class ApiInfo
 	public static final String GET_TWEET_FOR_ITERATOR = "getTweetForIterator";
 	public static final String UPDATE_USER_PROFILE_INFO = "updateuserpfofileinfo";
 	public static final String USER_EXISTS = "UserExists";
+	public static final String GET_TWEETS_TODAY = "gettweetstoday";
 	
 	
 	public static final String kEmail = "email";
