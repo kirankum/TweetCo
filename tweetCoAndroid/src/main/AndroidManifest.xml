@@ -106,6 +106,12 @@
             android:theme="@style/AppThemeWithActionBar">
         </activity>
         <activity
+            android:name="com.tweetco.activities.MentionedTweetsActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@style/AppThemeWithActionBar">
+        </activity>
+        <activity
             android:name="com.tweetco.activities.ImageViewActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"

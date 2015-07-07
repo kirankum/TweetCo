@@ -147,6 +147,8 @@ public class AllInOneActivity extends TweetCoBaseActivity
 		setTitle(menuItem.getTitle());
 		mDrawer.closeDrawers();
 
+		Intent intent = null;
+
 		switch(menuItem.getItemId()) {
 			case R.id.nav_home:
 				break;
@@ -156,7 +158,12 @@ public class AllInOneActivity extends TweetCoBaseActivity
 				break;
 
 			case R.id.nav_today:
-				Intent intent = new Intent(this, TodayTweetsActivity.class);
+				intent = new Intent(this, TodayTweetsActivity.class);
+				this.startActivity(intent);
+				break;
+
+			case R.id.nav_mentions:
+				intent = new Intent(this, MentionedTweetsActivity.class);
 				this.startActivity(intent);
 				break;
 

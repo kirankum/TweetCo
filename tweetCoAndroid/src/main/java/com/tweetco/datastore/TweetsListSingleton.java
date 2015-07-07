@@ -35,6 +35,7 @@ public enum TweetsListSingleton {
         IteratorAsKeyReplyTweetsListSingleton.INSTANCE.notifyAllObservers();
         TrendingTopicAsKeyTweetsListSingleton.INSTANCE.notifyAllObservers();
         UserAsKeyTweetsListSingleton.INSTANCE.notifyAllObservers();
+        MentionedTweetsListSingleton.INSTANCE.notifyAllObservers();
     }
 
     public void add(Tweet tweet) {
