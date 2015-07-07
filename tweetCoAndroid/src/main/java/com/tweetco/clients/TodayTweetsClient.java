@@ -36,16 +36,17 @@ public class TodayTweetsClient {
             public void onCompleted(JsonElement jsonObject, Exception exception, ServiceFilterResponse response) {
                 if(exception == null)
                 {
-
                     //The received data contains an inner join of tweets and tweet users.
                     //Read them both.
                     Gson gson = new Gson();
 
+                    JsonElement tweetsList = jsonObject.getAsJsonObject().get("tweetstoday");
+
                     Type collectionType = new TypeToken<List<Tweet>>(){}.getType();
-                    List<Tweet> list = gson.fromJson(jsonObject, collectionType);
+                    List<Tweet> list = gson.fromJson(tweetsList, collectionType);
 
                     Type tweetusertype = new TypeToken<List<TweetUser>>(){}.getType();
-                    List<TweetUser> tweetUserlist = gson.fromJson(jsonObject, tweetusertype);
+                    List<TweetUser> tweetUserlist = gson.fromJson(tweetsList, tweetusertype);
 
                     tweetList.addAll(list);
                     usersList.addAll(tweetUserlist);
