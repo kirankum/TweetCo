@@ -33,14 +33,14 @@ public class CustomClickableSpan extends ClickableSpan implements ParcelableSpan
 
     private final String mString;
     
-    public static final String TAG_REGEX = "\\S*#(?:\\[[^\\]]+\\]|\\S+)";
-    public static final String HANDLE_REGEX = "\\S*@(?:\\[[^\\]]+\\]|\\S+)";
+    public static final String TAG_REGEX = "#(?:\\[[^\\]]+\\]|\\S+)";
+    public static final String HANDLE_REGEX = "@(?:\\[[^\\]]+\\]|\\S+)";
     
 	public static final Pattern TAG_PATTERN = 
-			   Pattern.compile("\\S*#(?:\\[[^\\]]+\\]|\\S+)");
+			   Pattern.compile("#(?:\\[[^\\]]+\\]|\\S+)");
 	
 	public static final Pattern HANDLE_PATTERN = 
-			   Pattern.compile("\\S*@(?:\\[[^\\]]+\\]|\\S+)");
+			   Pattern.compile("@(?:\\[[^\\]]+\\]|\\S+)");
 	
 	
 
