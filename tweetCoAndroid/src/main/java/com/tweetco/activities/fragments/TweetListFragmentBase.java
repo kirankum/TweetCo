@@ -28,6 +28,7 @@ import com.tweetco.activities.adapter.TweetAdapter;
 import com.tweetco.activities.TweetDetailActivity;
 import com.tweetco.activities.UserProfileActivity;
 import com.tweetco.activities.helper.Helper;
+import com.tweetco.activities.helper.TweetUIHolder;
 import com.tweetco.dao.Tweet;
 import com.tweetco.datastore.TweetsListSingleton;
 import com.tweetco.models.tweets.TweetsBaseModel;
@@ -179,13 +180,12 @@ public class TweetListFragmentBase extends Fragment {
 
     protected void initAdapter(Activity activity, List<Integer> list) {
         tweetIteratorList = list;
-        mAdapter = new TweetAdapter(activity, R.layout.tweet, list, mProfileImageFetcher, mTweetContentImageFetcher, new TweetAdapter.OnProfilePicClick() {
+        mAdapter = new TweetAdapter(activity, R.layout.tweet, list, mProfileImageFetcher, mTweetContentImageFetcher, new TweetUIHolder.OnTweetItemClick() {
 
             @Override
-            public void onItemClick(int position) {
+            public void onClick(View v, int iterator) {
                 //Show user profile view
                 try {
-                    int iterator = tweetIteratorList.get(position);
                     Tweet tweet = TweetsListSingleton.INSTANCE.getTweet(iterator);
                     String owner = tweet.tweetowner;
                     if(!TextUtils.isEmpty(owner))
@@ -199,13 +199,11 @@ public class TweetListFragmentBase extends Fragment {
                 }
 
             }
-        }, new TweetAdapter.OnTweetClick() {
+        }, new TweetUIHolder.OnTweetItemClick() {
 
             @Override
-            public void onItemClick(int position)
-            {
+            public void onClick(View v, int iterator) {
                 try {
-                    int iterator = tweetIteratorList.get(position);
                     Tweet tweet = TweetsListSingleton.INSTANCE.getTweet(iterator);
                     Intent intent = new Intent(getActivity(), TweetDetailActivity.class);
                     intent.putExtra("Tweet", tweet);
@@ -214,23 +212,21 @@ public class TweetListFragmentBase extends Fragment {
                     e.printStackTrace();
                 }
             }
-        }, new TweetAdapter.OnReplyClick() {
+        }, new TweetUIHolder.OnTweetItemClick() {
 
             @Override
-            public void onItemClick(int position)
-            {
+            public void onClick(View v, int iterator) {
                 try {
-                    int iterator = tweetIteratorList.get(position);
                     Tweet tweet = TweetsListSingleton.INSTANCE.getTweet(iterator);
                     Helper.launchPostTweetActivity(TweetListFragmentBase.this.getActivity(), "@" + tweet.tweetowner + " ", tweet.iterator, tweet.tweetowner);
                 } catch (TweetNotFoundException e) {
                     e.printStackTrace();
                 }
             }
-        }, new TweetAdapter.OnUpvoteClick() {
+        }, new TweetUIHolder.OnTweetItemClick() {
+
             @Override
-            public void onItemClick(final int iterator, boolean selected)
-            {
+            public void onClick(View v, final int iterator) {
 
                     new AsyncTask<Void, Void, Void>() {
 
@@ -250,10 +246,10 @@ public class TweetListFragmentBase extends Fragment {
                     }.execute();
 
             }
-        }, new TweetAdapter.OnBookmarkClick() {
+        }, new TweetUIHolder.OnTweetItemClick() {
+
             @Override
-            public void onItemClick(final int iterator, boolean selected)
-            {
+            public void onClick(View v, final int iterator) {
                     new AsyncTask<Void, Void, Void>() {
 
                         @Override
@@ -274,10 +270,10 @@ public class TweetListFragmentBase extends Fragment {
 
 
             }
-        }, new TweetAdapter.OnHideClick() {
+        }, new TweetUIHolder.OnTweetItemClick() {
+
             @Override
-            public void onItemClick(final int iterator, boolean selected)
-            {
+            public void onClick(View v, final int iterator) {
 
                     new AsyncTask<Void, Void, Void>() {
 
