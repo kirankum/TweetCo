@@ -77,25 +77,5 @@ public class CustomFragmentPagerAdapter extends FragmentStatePagerAdapter
 	{
 		return FRAGMENT_COUNT;
 	}
-	
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        Fragment fragment = (Fragment) super.instantiateItem(container, position);
-        mFragmentsMap.put(position, new WeakReference<Fragment>(fragment));
-        return fragment;
-    }
-
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) 
-    {
-    	mFragmentsMap.remove(position);
-        super.destroyItem(container, position, object);
-    }
-
-    public Fragment getRegisteredFragment(int position) 
-    {
-    	WeakReference<Fragment> weakReference = mFragmentsMap.get(position);
-        return weakReference.get();
-    }
 
 }
