@@ -2,6 +2,7 @@ package com.tweetco.activities.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.imagedisplay.util.Utils;
 import com.onefortybytes.R;
+import com.tweetco.activities.Linkify;
 import com.tweetco.dao.LeaderboardUser;
 import com.tweetco.dao.Notification;
 import com.tweetco.utility.UiUtility;
@@ -43,6 +45,10 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
         if(notification != null) {
             TextView notificationTextView = UiUtility.getView(convertView, R.id.notificationText);
             notificationTextView.setText(notification.notiftext);
+
+            Linkify.addLinks(notificationTextView, Linkify.WEB_URLS | Linkify.HASH_TAGS | Linkify.USER_HANDLE);
+
+            notificationTextView.setMovementMethod(new LinkMovementMethod());
         }
 
         return convertView;
