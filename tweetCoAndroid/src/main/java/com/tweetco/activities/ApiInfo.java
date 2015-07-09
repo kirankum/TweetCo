@@ -60,6 +60,7 @@ public class ApiInfo
 	public static final String USER_EXISTS = "UserExists";
 	public static final String GET_TWEETS_TODAY = "gettweetstoday";
 	public static final String GET_MENTIONED_TWEETS = "getmentionsforuser";
+	public static final String GET_NOTIFICATIONS = "getnotificationsforuser";
 	
 	
 	public static final String kEmail = "email";
