@@ -1,6 +1,7 @@
 package com.tweetco.activities.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
@@ -12,9 +13,14 @@ import android.widget.TextView;
 
 import com.imagedisplay.util.Utils;
 import com.onefortybytes.R;
+import com.tweetco.Exceptions.TweetNotFoundException;
+import com.tweetco.TweetCo;
 import com.tweetco.activities.Linkify;
+import com.tweetco.activities.TweetDetailActivity;
 import com.tweetco.dao.LeaderboardUser;
 import com.tweetco.dao.Notification;
+import com.tweetco.dao.Tweet;
+import com.tweetco.datastore.TweetsListSingleton;
 import com.tweetco.utility.UiUtility;
 
 import java.util.List;
@@ -24,11 +30,16 @@ import java.util.List;
  */
 public class NotificationAdapter extends ArrayAdapter<Notification> {
 
-    private Context mContext = null;
+    public interface OnItemClick {
+        public void onClick(int iterator);
+    }
 
-    public NotificationAdapter(Context context, int resource, List<Notification> objects) {
+    private Context mContext = null;
+    private OnItemClick mOnItemClick;
+    public NotificationAdapter(Context context, int resource, List<Notification> objects, OnItemClick onItemClick) {
         super(context, resource, objects);
         mContext = context;
+        mOnItemClick = onItemClick;
     }
 
     @Override
@@ -41,7 +52,7 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
         }
 
 
-        Notification notification = (Notification)getItem(position);
+        final Notification notification = (Notification)getItem(position);
         if(notification != null) {
             TextView notificationTextView = UiUtility.getView(convertView, R.id.notificationText);
             notificationTextView.setText(notification.notiftext);
@@ -49,6 +60,13 @@ public class NotificationAdapter extends ArrayAdapter<Notification> {
             Linkify.addLinks(notificationTextView, Linkify.WEB_URLS | Linkify.HASH_TAGS | Linkify.USER_HANDLE);
 
             notificationTextView.setMovementMethod(new LinkMovementMethod());
+
+            notificationTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mOnItemClick.onClick(notification.iterator);
+                }
+            });
         }
 
         return convertView;
