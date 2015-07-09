@@ -22,26 +22,29 @@ public enum IteratorAsKeyReplyTweetsListSingleton {
         SimpleObservable<List<Integer>> observer = observers.get(iterator);
         if(observer == null) {
             observer = new SimpleObservable<List<Integer>>();
+            observers.put(iterator, observer);
         }
         observer.addListener(listener);
     }
+
     public void removeListener(String iterator, OnChangeListener<List<Integer>> listener) {
         SimpleObservable<List<Integer>> observer = observers.get(iterator);
-        if(observer == null) {
-            observer = new SimpleObservable<List<Integer>>();
+        if(observer != null) {
+            observer.removeListener(listener);
         }
-        observer.removeListener(listener);
     }
 
     public void updateReplyTweetsListForIteratorFromServer(String iterator, List<Tweet> list) {
         List<Integer> tweetsList = iteratorAsKeyReplyTweets.get(iterator);
         if(tweetsList == null) {
             tweetsList = new LinkedList<Integer>();
+            iteratorAsKeyReplyTweets.put(iterator, tweetsList);
         }
 
         TweetsListSingleton.INSTANCE.addAll(list);
         tweetsList.clear();
         tweetsList.addAll(Helper.getIteratorList(list));
+
         SimpleObservable<List<Integer>> observer = observers.get(iterator);
         if(observer != null) {
             observer.notifyObservers(tweetsList);
@@ -50,9 +53,6 @@ public enum IteratorAsKeyReplyTweetsListSingleton {
 
     public List<Integer> getRepliesForIterator(String iterator) {
         List<Integer> tweetsList = iteratorAsKeyReplyTweets.get(iterator);
-        if(tweetsList == null) {
-            tweetsList = new LinkedList<Integer>();
-        }
         return tweetsList;
     }
 

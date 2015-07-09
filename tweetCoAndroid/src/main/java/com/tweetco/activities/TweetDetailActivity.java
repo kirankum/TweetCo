@@ -16,18 +16,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.imagedisplay.util.ImageFetcher;
 import com.imagedisplay.util.Utils;
-import com.microsoft.windowsazure.mobileservices.ApiJsonOperationCallback;
-import com.microsoft.windowsazure.mobileservices.MobileServiceClient;
-import com.microsoft.windowsazure.mobileservices.ServiceFilterResponse;
 import com.onefortybytes.R;
 import com.tweetco.Exceptions.LeaderboardUserNotFoundException;
 import com.tweetco.Exceptions.TweetNotFoundException;
 import com.tweetco.Exceptions.TweetUserNotFoundException;
 import com.tweetco.TweetCo;
+import com.tweetco.activities.fragments.TweetFragment;
+import com.tweetco.activities.fragments.TweetRepliesListFragment;
 import com.tweetco.activities.helper.Helper;
 import com.tweetco.dao.Tweet;
 import com.tweetco.dao.TweetUser;
@@ -42,41 +39,16 @@ public class TweetDetailActivity extends TweetCoBaseActivity
 {
 	public static final String TAG = "TweetAdapter";
 
-	private TweetsBaseModel model;
-	
 	//The first imageFetcher loads profileImages and the second one loads the tweetcontent images.
-	ImageFetcher mImageFetcher;
-	ImageFetcher mImageFetcher2;
+	ImageFetcher mProfileImageFetcher;
+	ImageFetcher mTweetContentImageFetcher;
 
-	private static class ViewHolder
-	{
-		ImageView profilePicImage;
-		TextView handle;
-		TextView userName;
-		TextView tweetContent;
-		TextView tweetTime;
-		ImageView tweetContentImage;
-		TextView upvotesCount;
-		TextView bookmarksCount;
-		ImageView upvoteView;
-		ImageView bookmarkView;
-		TextView inReplyTo;
-		ImageView replyToTweetButton;
-		TextView tweet_upvotesCount;
-		TextView tweet_bookmarksCount;
-		LinearLayout repliesText;
-		LinearLayout inReplyToText;
-		FrameLayout repliesFragment;
-		FrameLayout inReplyToFragment;
-		//		ImageView hideTweet;
-	}
-	
-	private static class ViewHolderForBookmarkUpVoteAndHide
-	{
-		Tweet tweet;
-		int iterator;
-		String OwenerName;
-	}
+	private FrameLayout mMainTweetContainer;
+	private FrameLayout mMainTweetDetailsContainer;
+	private TextView tweetUpvotesCount;
+	private TextView tweetBookmarksCount;
+	private LinearLayout repliesText;
+	private LinearLayout inReplyToText;
 	
 	@Override
 	public void onCreate(Bundle bundle)
@@ -87,358 +59,110 @@ public class TweetDetailActivity extends TweetCoBaseActivity
 		
 		final Tweet tweet = (Tweet)getIntent().getParcelableExtra("Tweet");
 		
-		mImageFetcher = Utils.getImageFetcher(this, 60, 60);
+		mProfileImageFetcher = Utils.getImageFetcher(this, 60, 60);
 
-		mImageFetcher2 = Utils.getImageFetcher(this, 60, 60);
+		mTweetContentImageFetcher = Utils.getImageFetcher(this, 60, 60);
 
-		model = new TweetsBaseModel();
-		
-		ViewHolder viewholder = new ViewHolder();
-		viewholder.profilePicImage = UiUtility.getView(this, R.id.profile_pic);
-		viewholder.profilePicImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-		viewholder.handle = UiUtility.getView(this, R.id.handle);
-		viewholder.userName = UiUtility.getView(this, R.id.username);
-		viewholder.tweetContent = UiUtility.getView(this, R.id.tweetcontent);
-		viewholder.tweetTime = UiUtility.getView(this, R.id.time);
-		viewholder.inReplyTo = UiUtility.getView(this, R.id.in_reply_to);
-		viewholder.replyToTweetButton = UiUtility.getView(this, R.id.replyToTweet);
-		viewholder.tweet_upvotesCount = UiUtility.getView(this, R.id.tweet_upvoteCount);
-		viewholder.tweet_bookmarksCount = UiUtility.getView(this, R.id.tweet_bookmarksCount);
-		viewholder.repliesText = UiUtility.getView(this,  R.id.repliesText);
-		viewholder.inReplyToText = UiUtility.getView(this, R.id.inReplyToText);
-		viewholder.repliesFragment = UiUtility.getView(this, R.id.tweetsReplyListFragmentContainer);
-		viewholder.inReplyToFragment = UiUtility.getView(this, R.id.sourcetweetInReplyToFragmentContainer);
+		mMainTweetContainer = UiUtility.getView(this, R.id.mainTweetFragmentContainer);
+		mMainTweetDetailsContainer = UiUtility.getView(this, R.id.tweetsDetailFragmentContainer);
+		tweetUpvotesCount = UiUtility.getView(this, R.id.upvotesCount);
+		tweetBookmarksCount = UiUtility.getView(this, R.id.bookmarksCount);
+		repliesText = UiUtility.getView(this, R.id.repliesText);
+		inReplyToText = UiUtility.getView(this, R.id.inReplyToTextContainter);
 
-		viewholder.tweetContentImage = UiUtility.getView(this, R.id.tweet_content_image);
-		viewholder.upvoteView = UiUtility.getView(this, R.id.upvote);
-		viewholder.bookmarkView = UiUtility.getView(this, R.id.bookmark);
-		viewholder.upvotesCount = UiUtility.getView(this, R.id.upvotesCount);
-		viewholder.bookmarksCount = UiUtility.getView(this, R.id.bookmarksCount);
-		
-		viewholder.profilePicImage.setOnClickListener(new OnClickListener() {
-			
+		tweetBookmarksCount.setText(String.valueOf(getCount(tweet.bookmarkers, ";") + " Bookmarks"));
+		tweetBookmarksCount.setOnClickListener(new OnClickListener() {
+
 			@Override
-			public void onClick(View v) 
+			public void onClick(View v)
 			{
-				String owner = tweet.tweetowner;
-				if(!TextUtils.isEmpty(owner))
+				if(!TextUtils.isEmpty(tweet.bookmarkers))
 				{
-					Intent intent = new Intent(TweetDetailActivity.this, UserProfileActivity.class);
-					intent.putExtra(Constants.USERNAME_STR, owner);
-					TweetDetailActivity.this.startActivity(intent);
+					Intent intent = new Intent(getApplication(), UsersListActivity.class);
+					intent.putExtra("title", "Bookmarked by");
+					intent.putExtra("usersList", tweet.bookmarkers);
+					startActivity(intent);
 				}
 			}
 		});
 
-		try {
-			TweetUser tweeter = UsersListSigleton.INSTANCE.getUser(tweet.tweetowner.toLowerCase());
-			if (tweet != null)
-            {
-                String username = null;
-                String displayName = null;
-                if(tweeter == null)
-                {
-                    username = " ";
-                    displayName = "Anonymous";
-                }
-                else
-                {
-                    username = Utils.getTweetHandle(tweeter.username);
-                    displayName = tweeter.displayname;
-                }
+		tweetUpvotesCount.setText(String.valueOf(getCount(tweet.upvoters, ";") + " Upvotes"));
+		tweetUpvotesCount.setOnClickListener(new OnClickListener() {
 
-                viewholder.handle.setText(username);
-                viewholder.userName.setText(displayName);
-                viewholder.tweetContent.setText(tweet.tweetcontent);
-                Linkify.addLinks(viewholder.tweetContent, Linkify.WEB_URLS | Linkify.HASH_TAGS | Linkify.USER_HANDLE);
+			@Override
+			public void onClick(View v)
+			{
+				if(!TextUtils.isEmpty(tweet.upvoters))
+				{
+					Intent intent = new Intent(getApplication(), UsersListActivity.class);
+					intent.putExtra("title", "Upvoted by");
+					intent.putExtra("usersList", tweet.upvoters);
+					startActivity(intent);
+				}
+			}
+		});
 
-                viewholder.tweetContent.setMovementMethod(new LinkMovementMethod());
+		FragmentTransaction ftMainTweet = getSupportFragmentManager().beginTransaction();
+		TweetFragment tweetFragment = new TweetFragment();
+		Bundle newTweetBundle = new Bundle();
+		newTweetBundle.putInt("iterator", tweet.iterator);
+		tweetFragment.setArguments(newTweetBundle);
+		ftMainTweet.replace(R.id.mainTweetFragmentContainer, tweetFragment);
+		ftMainTweet.commit();
 
-                setCount(viewholder.tweet_upvotesCount, tweet.upvoters);
-                setCount(viewholder.tweet_bookmarksCount, tweet.bookmarkers);
-                viewholder.bookmarksCount.setText(String.valueOf(getCount(tweet.bookmarkers, ";") + " Bookmarks"));
-                viewholder.bookmarksCount.setOnClickListener(new OnClickListener() {
-
-                    @Override
-                    public void onClick(View v)
-                    {
-                        if(!TextUtils.isEmpty(tweet.bookmarkers))
-                        {
-                            Intent intent = new Intent(getApplication(), UsersListActivity.class);
-                            intent.putExtra("title", "Bookmarked by");
-                            intent.putExtra("usersList", tweet.bookmarkers);
-                            startActivity(intent);
-                        }
-                    }
-                });
-
-                viewholder.upvotesCount.setText(String.valueOf(getCount(tweet.upvoters, ";") + " Upvotes"));
-                viewholder.upvotesCount.setOnClickListener(new OnClickListener() {
-
-                    @Override
-                    public void onClick(View v)
-                    {
-                        if(!TextUtils.isEmpty(tweet.upvoters))
-                        {
-                            Intent intent = new Intent(getApplication(), UsersListActivity.class);
-                            intent.putExtra("title", "Upvoted by");
-                            intent.putExtra("usersList", tweet.upvoters);
-                            startActivity(intent);
-                        }
-                    }
-                });
-
-                viewholder.replyToTweetButton.setOnClickListener(new OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        Helper.launchPostTweetActivity(TweetDetailActivity.this, "@" + tweet.tweetowner + " ", tweet.iterator, tweet.tweetowner);
-                    }
-                });
-
-                loadTweetImage(tweet, viewholder.tweetContentImage);
-
-
-                viewholder.tweetTime.setText(Utils.getTime(tweet.__createdAt));
-
-                ViewHolderForBookmarkUpVoteAndHide viewHolderBookMarkUpvoteAndHide = new ViewHolderForBookmarkUpVoteAndHide();
-                viewHolderBookMarkUpvoteAndHide.iterator = tweet.iterator;
-                viewHolderBookMarkUpvoteAndHide.OwenerName = tweet.tweetowner;
-                viewHolderBookMarkUpvoteAndHide.tweet = tweet;
-
-                if(!TextUtils.isEmpty(tweet.inreplyto))
-                {
-                    viewholder.inReplyTo.setVisibility(View.VISIBLE);
-                    viewholder.inReplyTo.setText("In reply to " + tweet.sourceuser);
-                }
-                else
-                {
-                    viewholder.inReplyTo.setVisibility(View.GONE);
-                }
-
-                //UpVote ImageView
-
-                viewholder.upvoteView.setTag(viewHolderBookMarkUpvoteAndHide);
-                setUpVoteFlag(viewholder.upvoteView,tweet,TweetCommonData.getUserName());
-                viewholder.upvoteView.setOnClickListener(new OnClickListener()
-                {
-                    @Override
-                    public void onClick(View upvoteView)
-                    {
-                        upvoteView.setSelected(true);
-                        ViewHolderForBookmarkUpVoteAndHide holder = (ViewHolderForBookmarkUpVoteAndHide) upvoteView.getTag();
-						try {
-							model.upvoteTweet(holder.iterator);
-						} catch (MalformedURLException e) {
-							e.printStackTrace();
-						} catch (TweetNotFoundException e) {
-							e.printStackTrace();
-						} catch (LeaderboardUserNotFoundException e) {
-							e.printStackTrace();
-						}
-					}
-
-                });
-
-
-                viewholder.bookmarkView.setTag(viewHolderBookMarkUpvoteAndHide);
-                setBookMarkFlag(viewholder.bookmarkView,tweet,TweetCommonData.getUserName());
-                viewholder.bookmarkView.setOnClickListener(new OnClickListener()
-                {
-                    @Override
-                    public void onClick(View bookmarkView)
-                    {
-                        bookmarkView.setSelected(true);
-                        ViewHolderForBookmarkUpVoteAndHide viewHolderBookMarkUpvoteAndHide = (ViewHolderForBookmarkUpVoteAndHide) bookmarkView.getTag();
-						try {
-							model.bookmarkTweet(viewHolderBookMarkUpvoteAndHide.iterator);
-						} catch (MalformedURLException e) {
-							e.printStackTrace();
-						} catch (TweetNotFoundException e) {
-							e.printStackTrace();
-						} catch (LeaderboardUserNotFoundException e) {
-							e.printStackTrace();
-						}
-					}
-                });
-
-
-
-                //			holder.hideTweet.setTag(viewHolderBookMarkUpvoteAndHide);
-                //			holder.hideTweet.setOnClickListener(new OnClickListener()
-                //			{
-                //				@Override
-                //				public void onClick(View hideTweet)
-                //				{
-                //					ViewHolderForBookmarkUpVoteAndHide viewHolderBookMarkUpvoteAndHide = (ViewHolderForBookmarkUpVoteAndHide) hideTweet.getTag();
-                //					hide(hideTweet,TweetCommonData.getUserName(), viewHolderBookMarkUpvoteAndHide.iterator);
-                //				}
-                //			});
-
-
-                // Finally load the image asynchronously into the ImageView, this also takes care of
-                // setting a placeholder image while the background thread runs
-                if(tweeter!=null)
-                {
-                    loadProfileImage(tweeter,viewholder.profilePicImage);
-                }
-                else
-                {
-                    mImageFetcher.loadImage("A", viewholder.profilePicImage);
-                }
-
-            }
-            else
-            {
-                Log.e(TAG, "TweetUser Not found for tweet with content "+tweet.tweetcontent);
-            }
-
-		/*if(!TextUtils.isEmpty(tweet.replies))
+		if(!TextUtils.isEmpty(tweet.replies))
 		{
-			SetViewForReplies(viewholder, true);
+			SetViewForReplies(true);
 			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-	        TweetListFragment tweetListFragment = new TweetListFragment();
+	        TweetRepliesListFragment fragment = new TweetRepliesListFragment();
 	        Bundle newBundle = new Bundle();
-	        TweetRepliesFeedMode mode = new TweetRepliesFeedMode(String.valueOf(tweet.iterator));
-	        newBundle.putParcelable(Constants.TWEET_LIST_MODE, mode);
-	        newBundle.putBoolean("hideFooter", true);
-	        tweetListFragment.setArguments(newBundle);
-	        ft.replace(R.id.tweetsReplyListFragmentContainer, tweetListFragment);
+			newBundle.putString("iterator", String.valueOf(tweet.iterator));
+			fragment.setArguments(newBundle);
+	        ft.replace(R.id.tweetsDetailFragmentContainer, fragment);
 	        ft.commit();
 		}
 		else if(!TextUtils.isEmpty(tweet.inreplyto))
 		{
-			SetViewForReplies(viewholder, false);
+			SetViewForReplies(false);
 			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-	        TweetListFragment tweetListFragment = new TweetListFragment();
+	        TweetFragment fragment = new TweetFragment();
 	        Bundle newBundle = new Bundle();
-	        GetTweetForIteratorMode mode = new GetTweetForIteratorMode(tweet.inreplyto);
-	        newBundle.putParcelable(Constants.TWEET_LIST_MODE, mode);
-	        newBundle.putBoolean("hideFooter", true);
-	        tweetListFragment.setArguments(newBundle);
-	        ft.replace(R.id.sourcetweetInReplyToFragmentContainer, tweetListFragment);
+			newBundle.putInt("iterator", Integer.valueOf(tweet.inreplyto));
+			fragment.setArguments(newBundle);
+	        ft.replace(R.id.tweetsDetailFragmentContainer, fragment);
 	        ft.commit();
-		}*/
-		} catch (TweetUserNotFoundException e) {
-			e.printStackTrace();
-		}
-
-
-		ActionBar actionbar = getSupportActionBar();
-		if(actionbar!=null)
-		{
-			actionbar.setHomeButtonEnabled(true);
-			actionbar.setDisplayHomeAsUpEnabled(true);
 		}
 	}
 	
-	private void SetViewForReplies(ViewHolder viewholder, boolean sourceTweet)
+	private void SetViewForReplies(boolean sourceTweet)
 	{
 		if(sourceTweet)
 		{
-			viewholder.repliesText.setVisibility(View.VISIBLE);
-			viewholder.repliesFragment.setVisibility(View.VISIBLE);
-			viewholder.inReplyToText.setVisibility(View.GONE);
-			viewholder.inReplyToFragment.setVisibility(View.GONE);
+			repliesText.setVisibility(View.VISIBLE);
+			inReplyToText.setVisibility(View.GONE);
 		}
 		else
 		{
-			viewholder.repliesText.setVisibility(View.GONE);
-			viewholder.repliesFragment.setVisibility(View.GONE);
-			viewholder.inReplyToText.setVisibility(View.VISIBLE);
-			viewholder.inReplyToFragment.setVisibility(View.VISIBLE);
+			repliesText.setVisibility(View.GONE);
+			inReplyToText.setVisibility(View.VISIBLE);
 		}
 		
-		
-	}
-	
-	private void setCount(TextView view, String input)
-	{
-		int count = 0;
-		if(!TextUtils.isEmpty(input))
-		{
-			String[] counts = input.split(";");
-			count = counts.length;
-		}
-		
-		view.setText(String.valueOf(count));
 		
 	}
 
-	private void setUpVoteFlag(ImageView imageView,Tweet linkedTweet,String userName)
-	{
-		if(linkedTweet != null && imageView!=null)
-		{
-			boolean isCurrentUserUpVoted  = TweetUtils.isStringPresent(linkedTweet.upvoters, userName);
-			imageView.setSelected(isCurrentUserUpVoted);
-		}
-	}
-
-	private void setBookMarkFlag(ImageView imageView,Tweet linkedTweet,String userName)
-	{
-		if(linkedTweet != null && imageView!=null)
-		{
-			boolean didCurrentUserBookmark  = TweetUtils.isStringPresent(linkedTweet.bookmarkers, userName);
-			imageView.setSelected(didCurrentUserBookmark);
-		}
-	}
-	
-	private void loadProfileImage(TweetUser tweeter,ImageView imageView)
-	{
-		Log.d(TAG,"tweeter.profileimageurl="+tweeter.profileimageurl+ "   imageView="+imageView.toString());
-		if(TextUtils.isEmpty(tweeter.profileimageurl))
-		{
-			String initials = Utils.getInitials(tweeter.displayname);
-			mImageFetcher.loadImage(initials, imageView);
-		}
-		else
-		{
-			mImageFetcher.loadImage(tweeter.profileimageurl, imageView);
-		}
-	}
-	
-	private void loadTweetImage(final Tweet tweet,ImageView imageView)
-	{
-		if(TextUtils.isEmpty(tweet.imageurl))
-		{
-			imageView.setVisibility(View.GONE);
-		}
-		else
-		{
-			imageView.setVisibility(View.VISIBLE);
-			mImageFetcher2.loadImage(tweet.imageurl, imageView);
-			imageView.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) 
-				{
-					Intent intent = new Intent(TweetCo.mContext,ImageViewActivity.class);
-					intent.putExtra(Constants.IMAGE_TO_VIEW, tweet.imageurl);
-					intent.setFlags(intent.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);
-					TweetCo.mContext.startActivity(intent);				
-				}
-			});
-		}
-	}
-	
 	private static int getCount(String input, String delimeter)
 	{
 		int count = 0;
-		
+
 		if(!TextUtils.isEmpty(input))
 		{
 			count = input.split(delimeter).length;
 		}
-		
+
 		return count;
 	}
 	
-	@Override
-	public void onResume()
-	{
-		super.onResume();
-	}
+
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

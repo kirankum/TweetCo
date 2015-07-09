@@ -11,10 +11,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <include
+        <FrameLayout
+            android:id="@+id/mainTweetFragmentContainer"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            layout="@layout/tweet" />
+            android:layout_height="wrap_content">
+        </FrameLayout>
 
         <View
             android:layout_width="match_parent"
@@ -78,27 +79,20 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
-    
-    <FrameLayout
-        android:id="@+id/tweetsReplyListFragmentContainer"
-        android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1" android:visibility="gone">
-    </FrameLayout>
-    
-    <LinearLayout android:id="@+id/inReplyToText" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone" >
+
+    <LinearLayout android:id="@+id/inReplyToTextContainter" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:visibility="gone" >
     <TextView android:id="@+id/inReplyToText" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="In Reply To" android:gravity="center"/>
     <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="?android:attr/listDivider" />
     </LinearLayout>
-    
+
     <FrameLayout
-        android:id="@+id/sourcetweetInReplyToFragmentContainer"
+        android:id="@+id/tweetsDetailFragmentContainer"
         android:layout_width="fill_parent"
-        android:layout_height="0dip"
-        android:layout_weight="1" android:visibility="gone">
+        android:layout_height="wrap_content">
     </FrameLayout>
+
 
 </LinearLayout>
