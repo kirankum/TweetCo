@@ -52,12 +52,12 @@ public class TweetAdapter extends ArrayAdapter<Integer>
 	{
 		void onItemClick(int position);
 	}
-	
+
 	public interface OnTweetClick
 	{
 		void onItemClick(int position);
 	}
-	
+
 	public interface OnReplyClick
 	{
 		void onItemClick(int position);

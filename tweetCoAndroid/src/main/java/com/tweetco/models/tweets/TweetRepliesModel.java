@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class TweetRepliesModel extends TweetsBaseModel {
 
-    public void refreshTweetsOfTopicFromServer(String sourceTweetIterator) throws MalformedURLException {
+    public void refreshReplyTweetsOfTweet(String sourceTweetIterator) throws MalformedURLException {
         List<Tweet> tweets = new ArrayList<Tweet>();
         List<TweetUser> usersList = new ArrayList<TweetUser>();
 
