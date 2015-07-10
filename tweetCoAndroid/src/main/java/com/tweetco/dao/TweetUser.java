@@ -1,6 +1,8 @@
 package com.tweetco.dao;
 
 
+import android.text.TextUtils;
+
 public class TweetUser
 {
     public String Id;
@@ -21,7 +23,7 @@ public class TweetUser
 	@Override
 	public boolean equals(Object o) {
 		boolean isEqual = false;
-		if(o instanceof  TweetUser)
+		if(o instanceof  TweetUser && !TextUtils.isEmpty(username))
 		{
 			isEqual = username.equals(((TweetUser) o).username);
 		}
