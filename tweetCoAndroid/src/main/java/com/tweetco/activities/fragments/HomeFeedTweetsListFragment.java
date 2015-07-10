@@ -50,12 +50,6 @@ public class HomeFeedTweetsListFragment extends TweetListFragmentBase implements
 
                         return null;
                     }
-
-                    @Override
-                    protected void onPostExecute(Void aVoid) {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-
                 }.execute();
             }
 

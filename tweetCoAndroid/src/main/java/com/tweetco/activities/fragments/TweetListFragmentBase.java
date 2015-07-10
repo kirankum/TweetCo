@@ -84,64 +84,6 @@ public class TweetListFragmentBase extends Fragment {
         linlaHeaderProgress = (LinearLayout) v.findViewById(R.id.linlaHeaderProgress);
 
         mSwipeRefreshLayout = UiUtility.getView(v, R.id.tweetList_swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-
-            @Override
-            public void onRefresh() {
-
-                if(mCallback != null) {
-                    mCallback.onRefresh();
-                }
-            }
-        });
-
-        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-                // Pause fetcher to ensure smoother scrolling when flinging
-                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
-                    // Before Honeycomb pause image loading on scroll to help with performance
-                    if (!Utils.hasHoneycomb()) {
-                        mProfileImageFetcher.setPauseWork(true);
-                    }
-                } else {
-                    mProfileImageFetcher.setPauseWork(false);
-                }
-            }
-
-            @Override
-            public void onScroll(AbsListView absListView, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
-
-                if(mCallback != null && mAdapter != null) {
-                    // In scroll-to-bottom-to-load mode, when the sum of first visible position and visible count equals the total number
-                    // of items in the adapter it reaches the bottom
-                    int bufferItemsToShow = mAdapter.getCount() -(firstVisibleItem + visibleItemCount);
-                    Log.d(TAG, "There are getCount()="+ mAdapter.getCount()+" firstVisibleItem="+firstVisibleItem+ " visibleItemCount="+visibleItemCount);
-                    if(bufferItemsToShow < 10  && mAdapter.canScroll())
-                    {
-                        mCallback.onScroll();
-                    }
-
-                }
-
-            }
-        });
-
-        // This listener is used to get the final width of the GridView and then calculate the
-        // number of columns and the width of each column. The width of each column is variable
-        // as the GridView has stretchMode=columnWidth. The column width is used to set the height
-        // of each view so we get nice square thumbnails.
-        mListView.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-
-                    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-                    @Override
-                    public void onGlobalLayout() {
-                        Log.v(TAG, "onGlobalLayout layout Done");
-                        int visibleChildCount = (mListView.getLastVisiblePosition() - mListView.getFirstVisiblePosition()) + 1;
-                    }
-                });
 
         return v;
     }
@@ -299,6 +241,65 @@ public class TweetListFragmentBase extends Fragment {
         });
 
         mListView.setAdapter(mAdapter);
+
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
+                // Pause fetcher to ensure smoother scrolling when flinging
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+                    // Before Honeycomb pause image loading on scroll to help with performance
+                    if (!Utils.hasHoneycomb()) {
+                        mProfileImageFetcher.setPauseWork(true);
+                    }
+                } else {
+                    mProfileImageFetcher.setPauseWork(false);
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView absListView, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                if(mCallback != null && mAdapter != null) {
+                    // In scroll-to-bottom-to-load mode, when the sum of first visible position and visible count equals the total number
+                    // of items in the adapter it reaches the bottom
+                    int bufferItemsToShow = mAdapter.getCount() -(firstVisibleItem + visibleItemCount);
+                    Log.d(TAG, "There are getCount()="+ mAdapter.getCount()+" firstVisibleItem="+firstVisibleItem+ " visibleItemCount="+visibleItemCount);
+                    if(bufferItemsToShow < 10  && mAdapter.canScroll())
+                    {
+                        mCallback.onScroll();
+                    }
+
+                }
+
+            }
+        });
+
+        // This listener is used to get the final width of the GridView and then calculate the
+        // number of columns and the width of each column. The width of each column is variable
+        // as the GridView has stretchMode=columnWidth. The column width is used to set the height
+        // of each view so we get nice square thumbnails.
+        mListView.getViewTreeObserver().addOnGlobalLayoutListener(
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+
+                    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+                    @Override
+                    public void onGlobalLayout() {
+                        Log.v(TAG, "onGlobalLayout layout Done");
+                        int visibleChildCount = (mListView.getLastVisiblePosition() - mListView.getFirstVisiblePosition()) + 1;
+                    }
+                });
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+
+                if (mCallback != null) {
+                    mCallback.onRefresh();
+                }
+            }
+        });
     }
 
 
