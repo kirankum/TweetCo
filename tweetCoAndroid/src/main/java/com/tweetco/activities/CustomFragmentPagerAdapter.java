@@ -5,6 +5,7 @@ import java.lang.ref.WeakReference;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
@@ -14,12 +15,10 @@ import com.tweetco.activities.fragments.LeaderboardFragment;
 import com.tweetco.activities.fragments.TrendingFragment;
 import com.tweetco.activities.fragments.UsersListFragment;
 
-public class CustomFragmentPagerAdapter extends FragmentStatePagerAdapter
+public class CustomFragmentPagerAdapter extends FragmentPagerAdapter
 {
 	public static final int FRAGMENT_COUNT = 4;
 	
-	 SparseArray<WeakReference<Fragment>> mFragmentsMap = new SparseArray<WeakReference<Fragment>>();
-
 	public CustomFragmentPagerAdapter(Context context, FragmentManager fm)
 	{
 		super(fm);

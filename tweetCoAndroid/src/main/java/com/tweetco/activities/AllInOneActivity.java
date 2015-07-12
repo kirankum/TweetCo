@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
@@ -217,11 +218,6 @@ public class AllInOneActivity extends TweetCoBaseActivity
 		mViewPager.setAdapter(mPagerAdapter);
 		mViewPager.setOffscreenPageLimit(mPagerAdapter.getCount() - 1);
 		mViewPager.setCurrentItem(0);
-	}
-
-	public FragmentStatePagerAdapter getPagerAdapter()
-	{
-		return mPagerAdapter;
 	}
 
 	@Override
