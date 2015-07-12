@@ -46,6 +46,14 @@ public class HomeFeedTweetsModel extends TweetsBaseModel {
         obj.addProperty(ApiInfo.kTweetRequestTypeKey, ApiInfo.kOldTweetRequest);
         client.getTweets(ApiInfo.GET_TWEETS_FOR_USER, obj, tweets, usersList);
 
+        if(tweets.size() == 40) {
+            hasMoreOlderTweets = true;
+        }
+        else {
+            hasMoreOlderTweets = false;
+        }
+
+
         HomeFeedTweetsListSingleton.INSTANCE.addHomeFeedsTweetToBottom(tweets);
         UsersListSigleton.INSTANCE.updateCachedUsersList(usersList);
     }

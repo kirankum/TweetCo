@@ -265,9 +265,9 @@ public class TweetListFragmentBase extends Fragment {
                     // of items in the adapter it reaches the bottom
                     int bufferItemsToShow = mAdapter.getCount() -(firstVisibleItem + visibleItemCount);
                     Log.d(TAG, "There are getCount()="+ mAdapter.getCount()+" firstVisibleItem="+firstVisibleItem+ " visibleItemCount="+visibleItemCount);
-                    if(bufferItemsToShow < 10  && mAdapter.canScroll() && !mAdapter.mOnScrollCalled)
+                    if(bufferItemsToShow < 10  && mAdapter.canScroll() && baseModel.hasMoreOlderTweets)
                     {
-                        mAdapter.mOnScrollCalled = true;
+                        mAdapter.lock();
                         mCallback.onScroll();
                     }
 

@@ -14,6 +14,7 @@ import java.net.MalformedURLException;
 public class TweetsBaseModel {
 
     protected TweetsClient client = new TweetsClient();
+    public boolean hasMoreOlderTweets = true;
 
     public void upvoteTweet(int iterator) throws MalformedURLException, TweetNotFoundException, LeaderboardUserNotFoundException {
         TweetsListSingleton.INSTANCE.upvoteTweet(iterator);
