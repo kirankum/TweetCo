@@ -13,15 +13,15 @@ import java.util.List;
 /**
  * Created by kirankumar on 05/07/15.
  */
-public class TweetsTodayModel {
+public class TweetsTodayModel extends TweetsBaseModel {
 
-    private TodayTweetsClient client = new TodayTweetsClient();
+    private TodayTweetsClient todayTweetsClient = new TodayTweetsClient();
 
     public void refreshTodayTweetsListFromServer() throws MalformedURLException {
         List<Tweet> tweets = new ArrayList<Tweet>();
         List<TweetUser> usersList = new ArrayList<TweetUser>();
 
-        client.refreshTodayTweetsListFromServer(tweets, usersList);
+        todayTweetsClient.refreshTodayTweetsListFromServer(tweets, usersList);
 
         TodayTweetsListSingleton.INSTANCE.updateTodayTweetsListFromServer(tweets);
         UsersListSigleton.INSTANCE.updateCachedUsersList(usersList);

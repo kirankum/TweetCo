@@ -25,6 +25,7 @@ public class TodayTweetsListFragment extends TweetListFragmentBase implements On
     {
         super.onCreate(savedInstanceState);
         model = new TweetsTodayModel();
+        baseModel = model;
         mCallback = new ITweetListFragmentCallback() {
             @Override
             public void onScroll() {
