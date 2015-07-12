@@ -36,8 +36,6 @@ public class TrendingFragment extends ListFragmentWithSwipeRefreshLayout impleme
 		public String eventcount;
 	}
 		
-	private String mUserName = null;
-	
 	private TrendingAdapter mAdapter = null;
 
 	private TrendingListModel model = null;
@@ -92,8 +90,13 @@ public class TrendingFragment extends ListFragmentWithSwipeRefreshLayout impleme
 			@Override
 			protected Void doInBackground(Void... params) {
 				try {
-					mUserName = AccountSingleton.INSTANCE.getAccountModel().getAccountCopy().getUsername();
-					model.loadTrendingList();
+					if(TrendingListSingleton.INSTANCE.getTrendingList() == null ||
+							TrendingListSingleton.INSTANCE.getTrendingList().isEmpty()) {
+						model.loadTrendingList();
+					}
+					else {
+						refreshOnUIThread();
+					}
 				}
 				catch (MalformedURLException e)
 				{
@@ -132,6 +135,10 @@ public class TrendingFragment extends ListFragmentWithSwipeRefreshLayout impleme
 
 	@Override
 	public void onChange(TrendingListModel model) {
+		refreshOnUIThread();
+	}
+
+	private void refreshOnUIThread() {
 		if(isAdded()) {
 			this.getActivity().runOnUiThread(new Runnable() {
 				@Override
@@ -147,7 +154,6 @@ public class TrendingFragment extends ListFragmentWithSwipeRefreshLayout impleme
 			});
 		}
 	}
- 
 	
 	private class TrendingAdapter extends ArrayAdapter<TrendingTag>
 	{

@@ -81,7 +81,13 @@ public class LeaderboardFragment extends ListFragmentWithSwipeRefreshLayout impl
 			@Override
 			protected Void doInBackground(Void... params) {
 				try {
-					model.loadLeaderboardUsersList();
+					if(LeaderboardListSingleton.INSTANCE.getLeaderboardUserList() == null ||
+							LeaderboardListSingleton.INSTANCE.getLeaderboardUserList().isEmpty()) {
+						model.loadLeaderboardUsersList();
+					}
+					else {
+						refreshUiOnUIThread();
+					}
 				}
 				catch (MalformedURLException e)
 				{
