@@ -63,6 +63,7 @@ public class TweetAdapter extends ArrayAdapter<Integer>
 	// A flag to enable/disable row clicks
 	protected boolean rowEnabled = true;
 	private long lastDataSetChangedTime = System.currentTimeMillis();
+	public boolean mOnScrollCalled = false;
 
 	public void lock()
 	{
@@ -77,9 +78,13 @@ public class TweetAdapter extends ArrayAdapter<Integer>
 	public boolean canScroll()
 	{
 		long currentTime = System.currentTimeMillis();
-		if((currentTime- lastDataSetChangedTime) > Constants.THROTTLE_TIME_BETWEEN_DOWN_SCROLL)
+		if((currentTime- lastDataSetChangedTime) > Constants.THROTTLE_TIME_BETWEEN_DOWN_SCROLL && !mOnScrollCalled)
 		{
 			canScroll = true;
+		}
+		else
+		{
+			canScroll = false;
 		}
 		return canScroll;
 	}
@@ -109,6 +114,7 @@ public class TweetAdapter extends ArrayAdapter<Integer>
 		Log.v(TAG, "notifyDataSetChanged()");
 		super.notifyDataSetChanged();
 		lastDataSetChangedTime =  System.currentTimeMillis();
+		mOnScrollCalled = false;
 	}
 	@Override
 	public void notifyDataSetInvalidated() 
@@ -116,6 +122,7 @@ public class TweetAdapter extends ArrayAdapter<Integer>
 		Log.v(TAG, "notifyDataSetInvalidated()");
 		super.notifyDataSetInvalidated();
 		lastDataSetChangedTime =  System.currentTimeMillis();
+		mOnScrollCalled = false;
 	}
 
 
