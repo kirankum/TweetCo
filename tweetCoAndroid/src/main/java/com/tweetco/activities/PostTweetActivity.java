@@ -86,6 +86,7 @@ public class PostTweetActivity extends TweetCoBaseActivity
 	private Button mImageGalleryButton;
 	private Button mImageCameraButton;
 	private ImageView mTweetImage;
+	private Uri mTweetImageUri;
 	private CheckBox mAnonymousCheckBox = null;
 	private CheckBox mPostToTwitterCheckBox = null;
 
@@ -130,6 +131,11 @@ public class PostTweetActivity extends TweetCoBaseActivity
 		mTweetContent.setAdapter(new ArrayAdapter<String>(PostTweetActivity.this,
 				android.R.layout.simple_dropdown_item_1line, getUsernamesAndHashtags(UsersListSigleton.INSTANCE.getUsersList().iterator(), TrendingListSingleton.INSTANCE.getTrendingList().iterator())));
 		mTweetContent.setThreshold(1);
+
+		if(savedInstanceState != null) {
+			mTweetImageUri = (Uri)savedInstanceState.getParcelable("imageuri");
+			mTweetImage.setImageURI(mTweetImageUri);
+		}
 		
 		mPostToTwitterCheckBox.setOnClickListener(new OnClickListener() {
 			@Override
@@ -364,7 +370,18 @@ public class PostTweetActivity extends TweetCoBaseActivity
 	    handleInputText(inputText);
 
 	}
-	
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+
+
+		if(mTweetImageUri != null) {
+			outState.putParcelable("imageuri", mTweetImageUri);
+		}
+
+		super.onSaveInstanceState(outState);
+	}
+
 	void handleSendImage(Intent intent) 
 	{
 	    Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
@@ -408,6 +425,7 @@ public class PostTweetActivity extends TweetCoBaseActivity
 
 					if(fileUri != null)
 					{
+						mTweetImageUri = fileUri;
 						mTweetImage.setImageURI(fileUri);
 					}
 				}
